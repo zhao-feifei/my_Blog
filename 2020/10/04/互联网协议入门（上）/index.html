@@ -99,9 +99,9 @@
           api: ''
         },
         motto: {
-          default: '程序，是人的思想在计算机中的表达。',
+          default: '我在开了灯的床头下，想问问自己的心啊。',
           typing: true,
-          api: '',
+          api: 'https://v2.jinrishici.com/one.json',
           data_contents: '["data","content"]'
         },
       },
@@ -139,6 +139,32 @@
 <body class="lock-screen">
   <div class="loading" id="loading"></div>
   
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">互联网协议入门（上）</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
   
 
 <nav class="menu">
@@ -149,22 +175,26 @@
     <ul class="menu-content"><li class="menu-item">
         <a href="/ " class="underline "> 首页</a>
       </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
         <a href="/archives/ " class="underline "> 归档</a>
       </li><li class="menu-item">
         <a href="/tags/ " class="underline "> 标签</a>
       </li><li class="menu-item">
         <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
       </li></ul>
     
-      <div class="menu-copyright"><p>辽ICP备2020012873号 </p></div>
+      <div class="menu-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
     
   </div>
 </nav>
   <main id="main">
   <div class="article-wrap">
     <div class="row container">
-      <div class="col-xl-3"></div>
-      <div class="col-xl-6"><article class="article">
+      <div class="col-xl-3" style="flex: 0 0 17%"></div>
+      <div class="col-xl-6" style="flex: 0 0 66%; max-width: 100%"><article class="article">
   <div class="wrap">
     <section class="head">
   <img   class="lazyload" data-original="/images/1/111.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
@@ -180,7 +210,7 @@
     <section class="main">
       <section class="content">
         
-        <p><p>计算机网络总结</p></p>
+          <p><p>计算机网络总结</p></p>
         
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>我们每天使用互联网，你是否想过，它是如何实现的？</p>
 <p>全世界几十亿台电脑，连接在一起，两两通信。上海的某一块网卡送出信号，洛杉矶的另一块网卡居然就收到了，两者实际上根本不知道对方的物理位置，你不觉得这是很神奇的事情吗？<br>互联网的核心是一系列协议，总称为”互联网协议”（Internet Protocol Suite）。它们对电脑如何连接和组网，做出了详尽的规定。理解了这些协议，就理解了互联网的原理。<br>下面就是我的学习笔记。因为这些协议实在太复杂、太庞大，我想整理一个简洁的框架，帮助自己从总体上把握它们。为了保证简单易懂，我做了大量的简化，有些地方并不全面和精确，但是应该能够说清楚互联网的原理。</p>
@@ -271,15 +301,15 @@
 <p><img    class="lazyload" data-original="/images/theme/1.13.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">avatar</span></p>
 <p>至此，整个互联网的五层结构，自下而上全部讲完了。这是从系统的角度，解释互联网是如何构成的。下一篇，我反过来，从用户的角度，自上而下看看这个结构是如何发挥作用，完成一次网络数据交换的。</p>
       </section>
-      <!-- <section class="extra">
+      <section class="extra">
         
-          <ul class="copyright">
+          <!-- <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
     <li><strong>本文链接：</strong><a href="http://example.com/2020/10/04/%E4%BA%92%E8%81%94%E7%BD%91%E5%8D%8F%E8%AE%AE%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%8A%EF%BC%89/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;04&#x2F;%E4%BA%92%E8%81%94%E7%BD%91%E5%8D%8F%E8%AE%AE%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%8A%EF%BC%89&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;04&#x2F;%E4%BA%92%E8%81%94%E7%BD%91%E5%8D%8F%E8%AE%AE%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%8A%EF%BC%89&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
-</ul>
+</ul> -->
         
         
           <section class="donate">
@@ -301,14 +331,14 @@
     <a href="/2020/10/02/index/">第一篇博文<i class="iconfont iconright"></i></a>
   </nav>
 
-      </section> -->
+      </section>
       
     </section>
   </div>
 </article></div>
-      <div class="col-xl-3">
+      <div class="col-xl-3" style="flex: 0 0 17%">
         
-          <!-- 
+        <!-- 
   <aside class="toc-wrap">
     <h3 class="toc-title">文章目录：</h3>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-text">引言</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E6%96%87"><span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E6%A6%82%E8%BF%B0"><span class="toc-text">一.概述</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C-%E5%AE%9E%E4%BD%93%E5%B1%82"><span class="toc-text">二.实体层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E9%93%BE%E6%8E%A5%E5%B1%82"><span class="toc-text">三.链接层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-text">四.网络层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94-%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="toc-text">五.传输层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD-%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-text">六.应用层</span></a>
@@ -323,21 +353,49 @@
 
 <footer class="footer">
   <div class="footer-social"><a 
-        href="https://github.com/zhao-feifei "
+        href="tencent://message/?Menu=yes&uin=894519210 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="javascript:; "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#09BB07'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconwechat-fill "></i>
+      </a><a 
+        href="https://www.instagram.com/izhaoo/ "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#DA2E76'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconinstagram "></i>
+      </a><a 
+        href="https://github.com/zhaoo "
         target="_blank"
         class="footer-social-item"
         onMouseOver="this.style.color= '#9f7be1'" 
         onMouseOut="this.style.color='#33333D'">
           <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:izhaoo@163.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
       </a></div>
   
-    <div class="footer-copyright"><p>辽ICP备2020012873号 </p></div>
+    <div class="footer-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
   
 </footer>
   
-      <!-- <div class="fab fab-plus">
+      <div class="fab fab-plus">
     <i class="iconfont iconplus"></i>
-  </div> -->
+  </div>
   
   
   
