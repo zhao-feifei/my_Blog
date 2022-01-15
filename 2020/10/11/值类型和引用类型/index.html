@@ -6,13 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>动态规划入门 - Hexo</title>
+  <title>基本类型和引用类型的比较 - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
-  <meta name="description" content="  关于动态规划的一点个人理解
-一.什么是动态规划？不...">
+  <meta name="description" content="  JavaScript数据类型
+一.  JavaSc...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -153,7 +153,7 @@
     
     
   </div>
-  <div class="center">动态规划入门</div>
+  <div class="center">基本类型和引用类型的比较</div>
   <div class="right">
     <i class="iconfont iconmenu j-navbar-menu"></i>
   </div>
@@ -195,78 +195,49 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="/images/2/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/4/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">动态规划入门</h1>
+    <h1 class="head-title">基本类型和引用类型的比较</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1369</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>673</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-        <p><p>  关于动态规划的一点个人理解</p>
+        <p><p>  JavaScript数据类型</p>
         
         </p>
-<h4 id="一-什么是动态规划？"><a href="#一-什么是动态规划？" class="headerlink" title="一.什么是动态规划？"></a>一.什么是动态规划？</h4><p>不做概念复读机，用自己的话说，动态规划就是将原问题拆分为子问题的一种方法。这种方法在计算机科学，数学，经济学等领域广泛应用。举个例子，1+1=？，答案是2，那么，1+1+1=？此时，我们不需要重新计算1+1的值，只需要在2的基础上加1即可。</p>
-<h4 id="二-动态规划的解题步骤"><a href="#二-动态规划的解题步骤" class="headerlink" title="二.动态规划的解题步骤"></a>二.动态规划的解题步骤</h4><blockquote>
-<p>注：这里特指利用动态规划解算法题的步骤</p>
-</blockquote>
-<h5 id="1-搞清楚dp数组的含义"><a href="#1-搞清楚dp数组的含义" class="headerlink" title="1.搞清楚dp数组的含义"></a>1.搞清楚dp数组的含义</h5><p>我们需要创建一个dp数组（dp是Dynamic programming的缩写）用来存储已知的历史记录，比如上面的1+1=2，计算1+1+1的时候我们就可以直接利用已经算出的历史记录，节省时间，那么首先要搞清楚dp数组中的元素代表的是什么含义？</p>
-<h5 id="2-写出状态转移方程"><a href="#2-写出状态转移方程" class="headerlink" title="2.写出状态转移方程"></a>2.写出状态转移方程</h5><p>这是最难的一个步骤，一般情况下写出状态转移方程就已经成功了一半，其实就是dp数组中各元素之间的关系式，比如如上面例子的状态转移方程就是dp[i]=dp[i-1]+1</p>
-<h5 id="3-找到初始值"><a href="#3-找到初始值" class="headerlink" title="3.找到初始值"></a>3.找到初始值</h5><p>我们已经找到了元素之间的关系，只要给出一个初始值，就能逐个递推，最后算出结果dp[n]，而dp[n]也就是我们想求出的东西。</p>
-<h4 id="三-两道例题"><a href="#三-两道例题" class="headerlink" title="三.两道例题"></a>三.两道例题</h4><h5 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h5><blockquote>
-<p>小试牛刀：假设你正在爬楼梯。需要 <em>n</em> 阶你才能到达楼顶。</p>
-<p>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？</p>
-<p>给定 <em>n</em> 是一个正整数。</p>
-<p>例：</p>
-<p>输入：3</p>
-<p>输出：3</p>
-<p>解释：有三种方法可以爬到楼顶</p>
-<ol>
-<li>​    1 阶 + 1 阶 + 1 阶</li>
-<li>​    1 阶 + 2 阶</li>
-<li>​     2 阶 + 1 阶</li>
-</ol>
-</blockquote>
-<h6 id="1-dp-i-的含义"><a href="#1-dp-i-的含义" class="headerlink" title="1.dp[i]的含义"></a>1.dp[i]的含义</h6><p>按照之前的三个步骤，我们最终要计算的是爬到n阶台阶一共有多少种方法，那么，</p>
-<p>dp[i]表示爬上i阶台阶的方法数。</p>
-<h6 id="2-状态转移方程"><a href="#2-状态转移方程" class="headerlink" title="2.状态转移方程"></a>2.状态转移方程</h6><p>假设我爬到了第10阶台阶，显然，只有两种可能，我是从第9阶上了一步到达第10阶，或者是从第8阶上了两步到达第10阶，所以，<font color=#FF0000> 爬上第10阶的方法数 = 爬上第9阶的方法数 + 爬上第8阶的方法数 </font>，很容易写出状态转移方程：</p>
-<blockquote>
-<p>dp [ i ] = dp [ i - 1 ] + dp [ i - 2]</p>
-</blockquote>
-<h6 id="3-初始值"><a href="#3-初始值" class="headerlink" title="3.初始值"></a>3.初始值</h6><p>爬上第1阶有一种方法，第二阶有两种方法，分别给dp[1]和dp[2]赋值即可</p>
-<p>完整代码如下：</p>
-<p><img   class="lazyload" data-original="/images/2/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<hr>
-<h5 id="例题2"><a href="#例题2" class="headerlink" title="例题2"></a>例题2</h5><blockquote>
-<p>渐入佳境：给定一个包含非负整数的 m x n网格 grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。</p>
-<p><strong>说明：</strong>每次只能向下或者向右移动一步。</p>
-<p>示例：<img   class="lazyload" data-original="/images/2/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>输入：grid = [[1,3,1],[1,5,1],[4,2,1]]</p>
-<p>输出：7</p>
-<p>解释：因为路径 1→3→1→1→1 的总和最小。</p>
-</blockquote>
-<h6 id="1-dp-i-j-的含义"><a href="#1-dp-i-j-的含义" class="headerlink" title="1.dp[i] [j]的含义"></a>1.dp[i] [j]的含义</h6><p>这里用的是二维数组,dp[i] [j]表示走到当前位置的最小路径和。</p>
-<h6 id="2-状态转移方程-1"><a href="#2-状态转移方程-1" class="headerlink" title="2.状态转移方程"></a>2.状态转移方程</h6><p>题目规定了只能向下或者向右走，那么当前位置只能由上边或者左边的格子走过来</p>
-<p>因此状态转移方程：</p>
-<blockquote>
-<p>dp[i][j] = Math.min(dp [ i - 1 ] [ j ], dp [ i ] [ j - 1 ]) + grid [ i ] [ j ]</p>
-<p>注：grid [ i ] [ j ]表示当前格子中的数字</p>
-</blockquote>
-<h6 id="3-初始值-1"><a href="#3-初始值-1" class="headerlink" title="3.初始值"></a>3.初始值</h6><p>dp [0] [0]的值就是给定数组grid [0] [0]的值，需要注意要对第一行和第一列的dp数组进行初始化。</p>
-<p>完整代码：</p>
-<p><img   class="lazyload" data-original="/images/2/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="一-JavaScript中的数据类型"><a href="#一-JavaScript中的数据类型" class="headerlink" title="一.  JavaScript中的数据类型"></a>一.  JavaScript中的数据类型</h4><p>JavaScript中共有8种数据类型Undefined、Null、Boolean、Number、String，Symbol，BigInt，Object。按照存储方式的不同，又可以分为基本数据类型和引用数据类型。</p>
+<h4 id="二-两种类型的比较"><a href="#二-两种类型的比较" class="headerlink" title="二.  两种类型的比较"></a>二.  两种类型的比较</h4><h5 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h5><h6 id="1-存储地址"><a href="#1-存储地址" class="headerlink" title="1. 存储地址"></a>1. 存储地址</h6><p>基本类型存储在栈中，执行以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>此时栈内存如图所示：</p>
+<p><img   class="lazyload" data-original="/images/4/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h6 id="2-复制基本类型"><a href="#2-复制基本类型" class="headerlink" title="2.复制基本类型"></a>2.复制基本类型</h6><p>执行以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">let</span> b = a;</span><br><span class="line">a = <span class="number">11</span>；</span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">//10</span></span><br></pre></td></tr></table></figure>
+
+<p>在通过变量把一个原始值赋值 到另一个变量时，原始值会被复制到新变量的位置。这两个值是相互独立的，互不干扰，如下图所示：</p>
+<p><img   class="lazyload" data-original="/images/4/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h5 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h5><h6 id="1-存储地址-1"><a href="#1-存储地址-1" class="headerlink" title="1.存储地址"></a>1.存储地址</h6><p>引用类型存储在堆内存中，而栈内存中的变量值只是存储了堆内存中的地址，执行以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj1 = <span class="keyword">new</span> <span class="built_in">Object</span>()</span><br></pre></td></tr></table></figure>
+
+<p><img   class="lazyload" data-original="/images/4/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h6 id="2-复制引用类型"><a href="#2-复制引用类型" class="headerlink" title="2.复制引用类型"></a>2.复制引用类型</h6><p>在把引用值从一个变量赋给另一个变量时，存储在变量中的值也会被复制到新变量所在的位置。区别在于，这里复制的值实际上是一个指针，它指向存储在堆内存中的对象。例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj1 = <span class="keyword">new</span> <span class="built_in">Object</span>()</span><br><span class="line"><span class="keyword">let</span> obj2 = obj1</span><br><span class="line">obj1.name = <span class="string">&quot;法外狂徒张三&quot;</span></span><br><span class="line"><span class="built_in">console</span>.log(obj2.name) <span class="comment">//法外狂徒张三</span></span><br></pre></td></tr></table></figure>
+
+<p><img   class="lazyload" data-original="/images/4/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>此时obj1与obj2两个变量实际上指向同一个对象，如果更改了obj1对象上的某个属性，则obj2上的属性也会被修改。</p>
       </section>
       <section class="extra">
         
         <!-- <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
-    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul> -->
@@ -283,12 +254,12 @@
 </section>
          -->
         
-  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul> 
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul> 
 
         
   <nav class="nav">
-    <a></a>
-    <a href="/2020/10/11/%E5%A6%82%E4%BD%95%E4%BA%A4%E6%8D%A2%E4%B8%A4%E4%B8%AA%E5%8F%98%E9%87%8F%EF%BC%9F/">如何交换两个变量？<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/%E5%B0%8F%E6%95%B0%E8%AE%A1%E7%AE%97%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/"><i class="iconfont iconleft"></i>为什么 0.1+0.2！=0.3 ?</a>
+    <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
