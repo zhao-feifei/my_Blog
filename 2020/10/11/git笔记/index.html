@@ -201,7 +201,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>293</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>568</span>
     </div>
   </div>
 </section>
@@ -236,6 +236,15 @@
 <p><img   class="lazyload" data-original="/images/5/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 </li>
 </ol>
+<h4 id="三-GitFlow"><a href="#三-GitFlow" class="headerlink" title="三. GitFlow"></a>三. GitFlow</h4><p>GitFlow 是团队开发的一种最佳实践，将代码划分为以下几个分支</p>
+<p><img   class="lazyload" data-original="/images/5/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<ul>
+<li>Master 主分支。上面只保存正式发布的版本</li>
+<li>Hotfix  线上代码 Bug 修复分支。开发完后需要合并回Master和Develop分支，同时在Master上打一个tag</li>
+<li>Feather 功能分支。当开发某个功能时，创建一个单独的分支，开发完毕后再合并到 dev 分支</li>
+<li>Release 分支。待发布分支，Release分支基于Develop分支创建，在这个Release分支上测试，修改Bug</li>
+<li>Develop 开发分支。开发者都在这个分支上提交代码</li>
+</ul>
       </section>
       <section class="extra">
         
