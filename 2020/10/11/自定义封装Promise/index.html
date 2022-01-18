@@ -202,7 +202,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>547</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1077</span>
     </div>
   </div>
 </section>
@@ -223,6 +223,19 @@
 <p><img   class="lazyload" data-original="/images/6/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>另外需要注意的是Promise的状态只能修改一次，只需要加一个if判断就能实现</p>
 <p><img   class="lazyload" data-original="/images/6/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="四-then方法中的回调"><a href="#四-then方法中的回调" class="headerlink" title="四. then方法中的回调"></a>四. then方法中的回调</h4><p>状态改变后可以执行then方法中传入的两个回调函数，于是then方法变成：</p>
+<p><img   class="lazyload" data-original="/images/6/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>但是，调用then方法时Promise的状态仍然可能为pending，我们需要保存then方法中的回调函数，并且回调函数可能有多个，因此我们为构造函数添加两个数组类型的属性resolvedCallback，rejectedCallback用来保存回调函数，调用时使用forEach逐个调用回调函数。</p>
+<p><img   class="lazyload" data-original="/images/6/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="五-完善"><a href="#五-完善" class="headerlink" title="五. 完善"></a>五. 完善</h4><p>原生Promise的then方法是允许不传参数的，但是我们现在封装的Promise不传参数控制台会报错，在then方法中加两行代码即可解决，如果传入的是函数，那么将原来的函数赋值给它自己，如果不是函数，那么将其变为一个空的箭头函数</p>
+<p><img   class="lazyload" data-original="/images/6/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>另外有一个小细节，resolve和reject需要在事件循环末尾执行，因此需要给resole和reject中的代码加上setTimeout，下面是最终版本的Promise</p>
+<p><img   class="lazyload" data-original="/images/6/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="六-测试"><a href="#六-测试" class="headerlink" title="六. 测试"></a>六. 测试</h4><p>OK，至此我们已经完成了封装，可以试试代码有没有问题，使用以下代码进行测试：</p>
+<p><img   class="lazyload" data-original="/images/6/9.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>上面的代码使用原生Promise会依次输出 1 2 3 4 成功，下面是自定义Promise输出的值：</p>
+<p><img   class="lazyload" data-original="/images/6/10.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>可以看到是没有问题的，OK，本篇结束。</p>
       </section>
       <section class="extra">
         
@@ -250,8 +263,8 @@
 
         
   <nav class="nav">
-    <a href="/2020/10/11/%E5%B0%8F%E6%95%B0%E8%AE%A1%E7%AE%97%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/"><i class="iconfont iconleft"></i>为什么 0.1+0.2！=0.3 ?</a>
-    <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/"><i class="iconfont iconleft"></i>动态规划入门</a>
+    <a href="/2020/10/11/%E5%B0%8F%E6%95%B0%E8%AE%A1%E7%AE%97%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/">为什么 0.1+0.2！=0.3 ?<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
