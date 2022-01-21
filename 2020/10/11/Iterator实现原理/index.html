@@ -201,7 +201,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>572</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>677</span>
     </div>
   </div>
 </section>
@@ -247,6 +247,13 @@
 <p>控制台输出：</p>
 <p><img   class="lazyload" data-original="/images/7/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>value表示当前获取的值，done表示遍历是否结束</p>
+<h4 id="四-自定义数据添加迭代器"><a href="#四-自定义数据添加迭代器" class="headerlink" title="四. 自定义数据添加迭代器"></a>四. 自定义数据添加迭代器</h4><p>假设我们需要使用for   of循环 对arr里的member进行遍历（），由于没有iterator方法，此时控制台会报错</p>
+<p><img   class="lazyload" data-original="/images/7/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/7/9.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>为其添加iterator方法：</p>
+<p><img   class="lazyload" data-original="/images/7/10.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>此时就可以成功遍历</p>
+<p><img   class="lazyload" data-original="/images/7/11.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
       </section>
       <section class="extra">
         
