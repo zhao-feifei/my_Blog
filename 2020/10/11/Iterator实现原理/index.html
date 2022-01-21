@@ -201,7 +201,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>265</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>572</span>
     </div>
   </div>
 </section>
@@ -221,6 +221,32 @@
 <p>f)     TypedArray</p>
 <p>g)    NodeList</p>
 </blockquote>
+<h4 id="二-演示"><a href="#二-演示" class="headerlink" title="二. 演示"></a>二. 演示</h4><p>数组能够使用for  of 循环，正式因为原型上有Iterator，运行以下代码：</p>
+<p><img   class="lazyload" data-original="/images/7/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>在控制台可以看到以下输出：</p>
+<p><img   class="lazyload" data-original="/images/7/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>点开原型，拉到最下面可以看到：</p>
+<p><img   class="lazyload" data-original="/images/7/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="三-原理"><a href="#三-原理" class="headerlink" title="三. 原理"></a>三. 原理</h4><p>Iterator的工作原理：</p>
+<ol>
+<li><p>创建一个指针对象，指向当前数据结构的起始位置</p>
+</li>
+<li><p>调用对象的next方法，指针自动指向数据结构的第一个成员</p>
+</li>
+<li><p>接下来不断调用next方法，指针一直往后移动，直到指向最后一个成员</p>
+</li>
+<li><p>每调用next方法返回一个包含value和done属性的对象</p>
+</li>
+</ol>
+<p>OK,我们来验证一下,</p>
+<p><img   class="lazyload" data-original="/images/7/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>控制台可以看到其中的next方法</p>
+<p><img   class="lazyload" data-original="/images/7/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>我们来手动调用一下next方法、</p>
+<p><img   class="lazyload" data-original="/images/7/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>控制台输出：</p>
+<p><img   class="lazyload" data-original="/images/7/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>value表示当前获取的值，done表示遍历是否结束</p>
       </section>
       <section class="extra">
         
