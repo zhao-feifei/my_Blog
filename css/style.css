@@ -62,7 +62,7 @@
 }
 body {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   color: var(--color-text);
   font-family: Hiragino Sans GB;
   background-color: var(--color-background);
@@ -1496,7 +1496,7 @@ body input {
 }
 @media (min-width: 1200px) {
   .article-wrap .container {
-    max-width: calc(1700px * 12 / 6);
+    max-width: calc(800px * 12 / 6);
   }
 }
 .article .wrap {
@@ -1815,7 +1815,7 @@ body input {
 }
 @media (min-width: 1200px) {
   .article-wrap--pure .container {
-    max-width: 1700px;
+    max-width: 800px;
   }
 }
 .article-wrap--pure .article .wrap {
