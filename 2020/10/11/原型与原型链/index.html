@@ -201,7 +201,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1487</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1507</span>
     </div>
   </div>
 </section>
@@ -228,7 +228,7 @@
 <p>翻译一下就是每个JS对象一定对应一个原型对象，并从原型对象继承属性和方法。</p>
 <p>OK，请看以下代码：</p>
 <p><img   class="lazyload" data-original="/images/9/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>通过new关键字调用构造函数创建的实例对象，其__proto__与Person.prototype指向的是同一个对象。如图所示：</p>
+<p>通过new关键字调用构造函数创建的实例对象，其__proto__与Person.prototype指向的是同一个对象（<code>new</code>关键字具体干了些啥这里暂且不谈）。如图所示：</p>
 <p><img   class="lazyload" data-original="/images/9/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>总结一下：<font color='red'> 函数的 prototype 属性指向了一个对象，这个对象正是调用该构造函数而创建的实例的原型</font>。理解原型，这句话是核心。</p>
 <h4 id="三-原型的原型"><a href="#三-原型的原型" class="headerlink" title="三. 原型的原型"></a>三. 原型的原型</h4><p>在第一节中我们提到<strong>原型实际上是一个对象</strong>，而在第二节中我们又提到<strong>每个JS对象一定对应一个原型对象</strong>，那么原型对象是否有原型？答案是：有。原型对象就是通过 Object 构造函数生成的，所以原型对象的__proto__指向Object 构造函数的原型，如图所示：</p>

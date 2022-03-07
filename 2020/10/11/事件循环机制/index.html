@@ -202,7 +202,7 @@ JS是单线程的...">
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1309</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1347</span>
     </div>
   </div>
 </section>
@@ -269,6 +269,9 @@ JS是单线程的...">
 <li>遇到<code>new Promise</code>,直接输出11，<code>then</code>方法加入微队列，记为<code>then3</code>。此时队列如图：</li>
 </ol>
 <p><img   class="lazyload" data-original="/images/10/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<ol start="4">
+<li>执行 <code>pro3</code>和<code>then3</code>,分别输出10，12,微队列和宏队列已清空。</li>
+</ol>
 <p>OK，第三轮事件循环结束，上述代码会依次输出 1，7，6，8，2，4，3，5，9，11，10，12。有兴趣可以自己测试一下。</p>
       </section>
       <section class="extra">
