@@ -202,7 +202,7 @@ JS是单线程的...">
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>814</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1309</span>
     </div>
   </div>
 </section>
@@ -228,8 +228,48 @@ JS是单线程的...">
 <li>微任务执行完毕后，执行宏队列中的<font color='red'> 第一个</font>宏任务。</li>
 <li>循环第二部与第三步。</li>
 </ol>
-<p><img   class="lazyload" data-original="/images/9/12.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>回到我们开始的问题，这玩意儿有啥用？简单概况一句话：<font color='red'> 共享数据,节省内存空间</font>。假如在构造函数中定义属性及方法,仅仅是编写代码进行定义而已,而实际上里面定义的属性及方法是属于每个实例对象的,所以,创建多个对象,就会开辟多个内存空间,每块空间中的每个对象都有自己的属性及方法,大量创建对象,对象的方法都不是同一个方法(方法也是函数,函数代码也占用空间),为了节省内存空间,那么可以使用原型的方式,实现数据共享,节省内存空间。</p>
+<h4 id="三-小试牛刀"><a href="#三-小试牛刀" class="headerlink" title="三. 小试牛刀"></a>三. 小试牛刀</h4><p>来看一段有亿点点复杂的代码，测试一下对事件循环的理解：</p>
+<p><img   class="lazyload" data-original="/images/10/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>请问以上代码输出什么?</p>
+<p>OK我们按照之前的事件循环机制分析这段代码：</p>
+<ul>
+<li><strong>第一轮</strong></li>
+</ul>
+<ol>
+<li>从上向下执行代码，遇到<code>console.log(&#39;1&#39;)</code>,直接输出1。</li>
+<li>遇到<code>setTimeout</code>,记为<code> set1</code> ，将回调函数加入宏队列。</li>
+<li>遇到<code>process.nextTick</code>,记为 <code>pro1</code>，加入微队列。</li>
+<li>遇到<code>new Promise</code>,直接输出7，<code>then</code>方法加入微队列，记为<code>then1</code>。</li>
+<li>遇到<code>setTimeout</code>,记为<code>set2</code>，将回调函数加入宏队列。</li>
+</ol>
+<p>此时执行栈已经清空，两个队列如图：</p>
+<p><img   class="lazyload" data-original="/images/10/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>根据规则，我们需要清空微队列，执行<code>pro1</code>,输出6，执行<code>then1</code>,输出8。</p>
+<p>至此，我们已经完成了第一轮事件循环，已经输出 1，7，6，8。</p>
+<ul>
+<li><strong>第二轮</strong></li>
+</ul>
+<p>接下来执行宏队列中的第一个宏任务<code>set1</code>。</p>
+<ol>
+<li>遇到<code>process.nextTick</code>,记为 <code>pro2</code>，加入微队列。</li>
+<li>遇到<code>new Promise</code>,直接输出4，<code>then</code>方法加入微队列，记为<code>then2</code>。此时宏任务结束。此时队列如图：</li>
+</ol>
+<p><img   class="lazyload" data-original="/images/10/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<ol start="3">
+<li>清空微队列，分别输出3和5。</li>
+</ol>
+<p>OK，第二轮事件循环结束，此时已经输出 1，7，6，8，2，4，3，5。</p>
+<ul>
+<li><strong>第三轮</strong></li>
+</ul>
+<p>接下来执行最后一个宏任务<code>set2</code></p>
+<ol>
+<li>直接输出9。</li>
+<li>遇到<code>process.nextTick</code>,记为 <code>pro3</code>，加入微队列。</li>
+<li>遇到<code>new Promise</code>,直接输出11，<code>then</code>方法加入微队列，记为<code>then3</code>。此时队列如图：</li>
+</ol>
+<p><img   class="lazyload" data-original="/images/10/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>OK，第三轮事件循环结束，上述代码会依次输出 1，7，6，8，2，4，3，5，9，11，10，12。有兴趣可以自己测试一下。</p>
       </section>
       <section class="extra">
         
