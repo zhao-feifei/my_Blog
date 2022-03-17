@@ -6,15 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>闭包 - Hexo</title>
+  <title>Vue源码——响应式原理 - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
-  <meta name="description" content="JS中的闭包 
-一. 闭包示例请先看一段代码：
-
-分析...">
+  <meta name="description" content="Vue的响应式实现原理 
+引言：  在使用Vue进行开...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -155,7 +153,7 @@
       
       
     </div>
-    <div class="center">闭包</div>
+    <div class="center">Vue源码——响应式原理</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -197,98 +195,46 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="/images/11/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/12/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">闭包</h1>
+    <h1 class="head-title">Vue源码——响应式原理</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1826</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1785</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-          <p><p>JS中的闭包</p>
+          <p><p>Vue的响应式实现原理</p>
         
         </p>
-<h4 id="一-闭包示例"><a href="#一-闭包示例" class="headerlink" title="一. 闭包示例"></a>一. 闭包示例</h4><p>请先看一段代码：</p>
-<p><img   class="lazyload" data-original="/images/11/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>分析一下这段代码，由于执行上下文的存在，当<code>bar</code>函数执行时，<code>foo</code>函数的执行上下文已经被销毁（从栈中弹出），<code>bar</code>函数是无法读取<code>foo</code>函数作用域下的<code>name</code>值。但是如果动手测试一下会发现是可以的，Why？OK我们重新分析一下，我们都知道函数执行上下文会维护一个作用域链，同样的，<code>bar</code>函数执行上下文中也维护了一个作用域链，通过这个作用域链可以访问<code>fooContext</code>中的值，即使<code>fooContext</code>被销毁掉，JavaScript 依然会让 <code>fooContext</code> 中被引用的值保留在内存中，因此，<code>bar</code>函数仍然可以通过作用域链找到<code>name</code>,在这个例子中，<code>bar</code>函数和<code>name</code>组成的集合就成为<strong>闭包</strong>（自己总结的可能不太严谨，没关系下面来看看其他的定义）。</p>
-<h4 id="二-啥是闭包？"><a href="#二-啥是闭包？" class="headerlink" title="二. 啥是闭包？"></a>二. 啥是闭包？</h4><blockquote>
-<p>在一些语言中，在函数中可以（<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%B5%8C%E5%A5%97&spm=1001.2101.3001.7020">嵌套</a>）定义另一个函数时，如果内部的函数引用了外部的函数的变量，则可能产生闭包。————-维基百科</p>
-</blockquote>
-<blockquote>
-<p>一个函数和对其周围状态（<strong>lexical environment，词法环境</strong>）的引用捆绑在一起（或者说函数被引用包围），这样的组合就是<strong>闭包</strong>（<strong>closure</strong>）。————–MDN文档</p>
-</blockquote>
-<blockquote>
-<p>当函数可以记住并访问所在的词法作用域时，就产生了闭包，即使函数是在当前词法作用 域之外执行。———–《你不知道的JavaScript上卷》</p>
-</blockquote>
-<p>如果你理解了闭包的概念，会发现其实闭包无处不在，举个简单的例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">let</span> b = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在这个例子里函数b因为捕获了外部作用域（环境）中的变量a，因此形成了闭包。</p>
-<h4 id="二-事件循环机制"><a href="#二-事件循环机制" class="headerlink" title="二. 事件循环机制"></a>二. 事件循环机制</h4><p>OK，来到本篇的重点，JS中事件循环机制是怎样的？首先明确两个概念：<strong>宏任务（macrotask）</strong>和<strong>微任务（microtask）</strong>。宏任务是由宿主发起的，而微任务由JavaScript自身发起。常见的宏任务有：setTimeout/setInterval/setImmediate，UI render，I/O（Node.js）。常见的微任务有：Promise.then/catch/ finally，process.nextTick，Async/Await(实际就是promise)。JS分别使用两个<strong>队列</strong>来管理宏任务和微任务，运行过程如图所示：</p>
-<p><img   class="lazyload" data-original="/images/10/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<ol>
-<li>JS首先会执行所有script标签下的同步代码。</li>
-<li>再依次执行微队列中的<font color='red'> 所有</font>微任务。</li>
-<li>微任务执行完毕后，执行宏队列中的<font color='red'> 第一个</font>宏任务。</li>
-<li>循环第二部与第三步。</li>
-</ol>
-<h4 id="三-小试牛刀"><a href="#三-小试牛刀" class="headerlink" title="三. 小试牛刀"></a>三. 小试牛刀</h4><p>来看一段有亿点点复杂的代码，测试一下对事件循环的理解：</p>
-<p><img   class="lazyload" data-original="/images/10/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>请问以上代码输出什么?</p>
-<p>OK我们按照之前的事件循环机制分析这段代码：</p>
-<ul>
-<li><strong>第一轮</strong></li>
-</ul>
-<ol>
-<li>从上向下执行代码，遇到<code>console.log(&#39;1&#39;)</code>,直接输出1。</li>
-<li>遇到<code>setTimeout</code>,记为<code> set1</code> ，将回调函数加入宏队列。</li>
-<li>遇到<code>process.nextTick</code>,记为 <code>pro1</code>，加入微队列。</li>
-<li>遇到<code>new Promise</code>,直接输出7，<code>then</code>方法加入微队列，记为<code>then1</code>。</li>
-<li>遇到<code>setTimeout</code>,记为<code>set2</code>，将回调函数加入宏队列。</li>
-</ol>
-<p>此时执行栈已经清空，两个队列如图：</p>
-<p><img   class="lazyload" data-original="/images/10/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>根据规则，我们需要清空微队列，执行<code>pro1</code>,输出6，执行<code>then1</code>,输出8。</p>
-<p>至此，我们已经完成了第一轮事件循环，已经输出 1，7，6，8。</p>
-<ul>
-<li><strong>第二轮</strong></li>
-</ul>
-<p>接下来执行宏队列中的第一个宏任务<code>set1</code>。</p>
-<ol>
-<li>遇到<code>process.nextTick</code>,记为 <code>pro2</code>，加入微队列。</li>
-<li>遇到<code>new Promise</code>,直接输出4，<code>then</code>方法加入微队列，记为<code>then2</code>。此时宏任务结束。此时队列如图：</li>
-</ol>
-<p><img   class="lazyload" data-original="/images/10/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<ol start="3">
-<li>清空微队列，分别输出3和5。</li>
-</ol>
-<p>OK，第二轮事件循环结束，此时已经输出 1，7，6，8，2，4，3，5。</p>
-<ul>
-<li><strong>第三轮</strong></li>
-</ul>
-<p>接下来执行最后一个宏任务<code>set2</code></p>
-<ol>
-<li>直接输出9。</li>
-<li>遇到<code>process.nextTick</code>,记为 <code>pro3</code>，加入微队列。</li>
-<li>遇到<code>new Promise</code>,直接输出11，<code>then</code>方法加入微队列，记为<code>then3</code>。此时队列如图：</li>
-</ol>
-<p><img   class="lazyload" data-original="/images/10/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<ol start="4">
-<li>执行 <code>pro3</code>和<code>then3</code>,分别输出10，12,微队列和宏队列已清空。</li>
-</ol>
-<p>OK，第三轮事件循环结束，上述代码会依次输出 1，7，6，8，2，4，3，5，9，11，10，12。有兴趣可以自己测试一下。</p>
+<h5 id="引言："><a href="#引言：" class="headerlink" title="引言："></a>引言：</h5><p>  在使用<code>Vue</code>进行开发时，我们仅需关注数据本身，修改数据后视图会自动更新,省去了”手动操作DOM重新渲染”这一步,这一步看上去并不复杂，但需要考虑的问题很多，比如：哪些DOM需要被修改？每次数据变更都需要修改吗？修改的效率与性能如何？几个问题 Vue 内部就帮我们做了，那么 Vue 是如何在我们对数据修改后自动做这些事情呢？这几篇博客将深入<code>Vue</code>核心源码，看看<code>Vue</code>底层细节。</p>
+<h5 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h5><p>  这是<code>Vue</code>在github上的官方仓库<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue">点我跳转至源代码</a>，<code>src/core</code>文件夹下的代码是<code>Vue</code>项目的核心源码，支持在线查看，也可以下载到本地方便做笔记。</p>
+<h4 id="一-Object-defineProperty"><a href="#一-Object-defineProperty" class="headerlink" title="一. Object.defineProperty"></a>一. Object.defineProperty</h4><p>  实现响应式的核心是利用了ES5的<code>Object.defineProperty</code>方法，这也是为什么 Vue.js 不能兼容 IE8 及以下浏览器的原因，这个方法的基本使用不做介绍，具体可参考MDN文档<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">点我跳转至MDN文档</a>，需要注意的是 <code>get</code> 和 <code>set</code>，<code>get</code> 是一个给属性提供的 getter 方法，当我们访问了该属性的时候会触发 getter 方法；<code>set</code> 是一个给属性提供的 setter 方法，当我们对该属性做修改的时候会触发 setter 方法。OK我们来看一个例子：</p>
+<p><img   class="lazyload" data-original="/images/12/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>  当我们访问<code>obj.a</code>时，打印<code>有人读取了a属性</code>并返回1，设置新的值时，打印<code>属性a被设置成了新值</code>。这相当于我们自定义了<code>obj.a</code>取值和赋值的行为，使用自定义的<code>getter</code>和<code>setter</code>来重写了原有的行为，这也就是<code>数据劫持</code>的含义。在访问或者修改对象的某个属性时，我们可以进行额外的操作或者修改返回结果。一旦对象拥有了 getter 和 setter，我们可以简单地把这个对象称为响应式对象。vue源码中将其封装成了<strong>defineReactive</strong>方法。</p>
+<h4 id="二-observe"><a href="#二-observe" class="headerlink" title="二.  observe"></a>二.  observe</h4><p><code>observe</code>方法定义在 <code>src/core/observer/index.js</code> 中,功能就是用来监测数据的变化,首先给非 VNode 的对象类型数据添加一个 <code>Observer</code>，如果已经添加过则直接返回，否则在满足一定条件下去实例化一个 <code>Observer</code> 对象实例，下面是<code>observe</code>方法的代码：</p>
+<p><img   class="lazyload" data-original="/images/12/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="三-Observer"><a href="#三-Observer" class="headerlink" title="三. Observer"></a>三. Observer</h4><p><img   class="lazyload" data-original="/images/12/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>在Observer构造函数中，通过执行 <code>def</code> 函数把自身实例添加到数据对象 <code>value</code> 的 <code>__ob__</code> 属性上,<code>def</code> 的定义在 <code>src/core/util/lang.js</code> 中</p>
+<p><img   class="lazyload" data-original="/images/12/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><code>def</code> 函数也是对<code>Object.defineProperty</code> 方法的封装，在添加<code>__ob__</code> 属性的同时将其设置为不可枚举属性。接下来会对 <code>value</code> 类型做判断，如果是数组会调用 <code>observeArray</code> 方法，否则对纯对象调用 <code>walk</code> 方法。其中<code>observeArray</code> 是遍历数组再次调用 <code>observe</code> 方法，而 <code>walk</code> 方法是遍历对象的 key 调用 <code>defineReactive</code> 方法。</p>
+<h4 id="四-defineReactive"><a href="#四-defineReactive" class="headerlink" title="四. defineReactive"></a>四. defineReactive</h4><p>前面提到<code>defineReactive</code>方法是对<code>Object.defineProperty</code>方法的封装，在<code>defineReactive</code>方法中，对子对象递归调用 <code>observe</code> 方法，这样就保证了无论 <code>obj</code> 的结构多复杂，它的所有子属性也能变成响应式的对象，这样我们访问或修改 <code>obj</code> 中一个嵌套较深的属性，也能触发 getter 和 setter。</p>
+<p><img   class="lazyload" data-original="/images/12/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>可以看到里面有一个toString方法，这个方法是系统内置的，我们通过原型链可以调用。OK我们已经得到答案了，<font color='red'> 当读取实例的属性时，如果找不到，就会查找与对象关联的原型中的属性，如果还查不到，就去找原型的原型，一直找到最顶层为止</font>。这个玩意儿就是原型链。</p>
+<p>在图中标注一下：</p>
+<p><img   class="lazyload" data-original="/images/9/12.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>回到我们开始的问题，这玩意儿有啥用？简单概况一句话：<font color='red'> 共享数据,节省内存空间</font>。假如在构造函数中定义属性及方法,仅仅是编写代码进行定义而已,而实际上里面定义的属性及方法是属于每个实例对象的,所以,创建多个对象,就会开辟多个内存空间,每块空间中的每个对象都有自己的属性及方法,大量创建对象,对象的方法都不是同一个方法(方法也是函数,函数代码也占用空间),为了节省内存空间,那么可以使用原型的方式,实现数据共享,节省内存空间。</p>
       </section>
       <section class="extra">
         
           <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
-    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E9%97%AD%E5%8C%85/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E9%97%AD%E5%8C%85&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E9%97%AD%E5%8C%85&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/Vue%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Vue%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Vue%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul>
@@ -309,8 +255,8 @@
 
         
   <nav class="nav">
-    <a href="/2020/10/11/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B0%81%E8%A3%85Promise/"><i class="iconfont iconleft"></i>自定义封装Promise</a>
-    <a href="/2020/10/11/Vue%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/">Vue源码——响应式原理<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/%E9%97%AD%E5%8C%85/"><i class="iconfont iconleft"></i>闭包</a>
+    <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
