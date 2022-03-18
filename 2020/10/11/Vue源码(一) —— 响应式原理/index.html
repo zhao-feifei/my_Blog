@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<html lang="en" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue源码(一) —— 响应式原理 - Hexo</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content=", 算法">
+  <meta name="description" content="Vue的响应式实现原理 
+引言：  在使用Vue进行开...">
+  <meta name="author" content="John Doe">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: true,
+        alipay: 'https://pic.izhaoo.com/alipay.jpg',
+        wechat: 'https://pic.izhaoo.com/wechat.jpg'
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: true
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://pic.izhaoo.com/weapp-code.jpg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: false,
+        path: ''
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">Vue源码(一) —— 响应式原理</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="/ " class="underline "> 首页</a>
+      </li><li class="menu-item">
+        <a href="/galleries/ " class="underline "> 摄影</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/12/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">Vue源码(一) —— 响应式原理</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>2185</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+          <p><p>Vue的响应式实现原理</p>
+        
+        </p>
+<h5 id="引言："><a href="#引言：" class="headerlink" title="引言："></a>引言：</h5><p>  在使用<code>Vue</code>进行开发时，我们仅需关注数据本身，修改数据后视图会自动更新,省去了”手动操作DOM重新渲染”这一步,这一步看上去并不复杂，但需要考虑的问题很多，比如：哪些DOM需要被修改？每次数据变更都需要修改吗？修改的效率与性能如何？几个问题 Vue 内部就帮我们做了，那么 Vue 是如何在我们对数据修改后自动做这些事情呢？这几篇博客将深入<code>Vue</code>核心源码，看看<code>Vue</code>底层细节。</p>
+<h5 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h5><p>  这是<code>Vue</code>在github上的官方仓库<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue">点我跳转至源代码</a>，<code>src/core</code>文件夹下的代码是<code>Vue</code>项目的核心源码，支持在线查看，也可以下载到本地方便做笔记。</p>
+<h4 id="一-Object-defineProperty"><a href="#一-Object-defineProperty" class="headerlink" title="一. Object.defineProperty"></a>一. Object.defineProperty</h4><p>  实现响应式的核心是利用了ES5的<code>Object.defineProperty</code>方法，这也是为什么 Vue.js 不能兼容 IE8 及以下浏览器的原因，这个方法的基本使用不做介绍，具体可参考MDN文档<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">点我跳转至MDN文档</a>，需要注意的是 <code>get</code> 和 <code>set</code>，<code>get</code> 是一个给属性提供的 getter 方法，当我们访问了该属性的时候会触发 getter 方法；<code>set</code> 是一个给属性提供的 setter 方法，当我们对该属性做修改的时候会触发 setter 方法。OK我们来看一个例子：</p>
+<p><img   class="lazyload" data-original="/images/12/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>  当我们访问<code>obj.a</code>时，打印<code>有人读取了a属性</code>并返回1，设置新的值时，打印<code>属性a被设置成了新值</code>。这相当于我们自定义了<code>obj.a</code>取值和赋值的行为，使用自定义的<code>getter</code>和<code>setter</code>来重写了原有的行为，这也就是<code>数据劫持</code>的含义。在访问或者修改对象的某个属性时，我们可以进行额外的操作或者修改返回结果。一旦对象拥有了 getter 和 setter，我们可以简单地把这个对象称为响应式对象。vue源码中将其封装成了<strong>defineReactive</strong>方法。</p>
+<h4 id="二-observe"><a href="#二-observe" class="headerlink" title="二.  observe"></a>二.  observe</h4><p><code>observe</code>方法定义在 <code>src/core/observer/index.js</code> 中,功能就是用来监测数据的变化,首先给非 VNode 的对象类型数据添加一个 <code>Observer</code>，如果已经添加过则直接返回，否则在满足一定条件下去实例化一个 <code>Observer</code> 对象实例，下面是<code>observe</code>方法的代码：</p>
+<p><img   class="lazyload" data-original="/images/12/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="三-Observer"><a href="#三-Observer" class="headerlink" title="三. Observer"></a>三. Observer</h4><p><img   class="lazyload" data-original="/images/12/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>在Observer构造函数中，通过执行 <code>def</code> 函数把自身实例添加到数据对象 <code>value</code> 的 <code>__ob__</code> 属性上,<code>def</code> 的定义在 <code>src/core/util/lang.js</code> 中</p>
+<p><img   class="lazyload" data-original="/images/12/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><code>def</code> 函数也是对<code>Object.defineProperty</code> 方法的封装，在添加<code>__ob__</code> 属性的同时将其设置为不可枚举属性。接下来会对 <code>value</code> 类型做判断，如果是数组会调用 <code>observeArray</code> 方法，否则对纯对象调用 <code>walk</code> 方法。其中<code>observeArray</code> 是遍历数组再次调用 <code>observe</code> 方法，而 <code>walk</code> 方法是遍历对象的 key 调用 <code>defineReactive</code> 方法。</p>
+<h4 id="四-defineReactive"><a href="#四-defineReactive" class="headerlink" title="四. defineReactive"></a>四. defineReactive</h4><p>前面提到<code>defineReactive</code>方法是对<code>Object.defineProperty</code>方法的封装，在<code>defineReactive</code>方法中，对子对象递归调用 <code>observe</code> 方法，这样就保证了无论 <code>obj</code> 的结构多复杂，它的所有子属性也能变成响应式的对象，这样我们访问或修改 <code>obj</code> 中一个嵌套较深的属性，也能触发 getter 和 setter。</p>
+<p><img   class="lazyload" data-original="/images/12/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="五-总结"><a href="#五-总结" class="headerlink" title="五. 总结"></a>五. 总结</h4><p>可能有点乱，重新捋一捋，observe，Observer，defineReactive三者关系如下：</p>
+<p><img   class="lazyload" data-original="/images/12/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>这三个函数互相调用，形成递归，举个例子，对于下面这个对象obj</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const obj = &#123;</span><br><span class="line">  a: 1,</span><br><span class="line">  b: &#123;</span><br><span class="line">    c: 2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会有以下操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">执行observe(obj)</span><br><span class="line">├─ new Observer(obj),并执行this.walk遍历obj的属性，执行defineReactive</span><br><span class="line">    ├─ defineReactive(obj, a)</span><br><span class="line">        ├─ 执行observe(obj.a) 发现obj.a不是对象，直接返回</span><br><span class="line">        ├─ 执行defineReactive(obj, a) 的剩余代码</span><br><span class="line">    ├─ defineReactive(obj, b) </span><br><span class="line">	    ├─ 执行observe(obj.b) 发现obj.b是对象</span><br><span class="line">	        ├─ 执行 new Observer(obj.b)，遍历obj.b的属性，执行defineReactive</span><br><span class="line">                    ├─ 执行defineReactive(obj.b, c)</span><br><span class="line">                        ├─ 执行observe(obj.b.c) 发现obj.b.c不是对象，直接返回</span><br><span class="line">                        ├─ 执行defineReactive(obj.b, c)的剩余代码</span><br><span class="line">            ├─ 执行defineReactive(obj, b)的剩余代码</span><br><span class="line">结束</span><br></pre></td></tr></table></figure>
+
+<p>OK，至此我们已经知道了Vue底层是如何对数据进行劫持将其变为响应式。</p>
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>John Doe</li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/Vue%E6%BA%90%E7%A0%81(%E4%B8%80)%20%E2%80%94%E2%80%94%20%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Vue%E6%BA%90%E7%A0%81(%E4%B8%80)%20%E2%80%94%E2%80%94%20%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Vue%E6%BA%90%E7%A0%81(%E4%B8%80)%20%E2%80%94%E2%80%94%20%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+          <section class="donate">
+  <div id="qrcode-donate">
+    <img   class="lazyload" data-original="https://pic.izhaoo.com/alipay.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" >
+  </div>
+  <div class="icon">
+    <a href="javascript:;" id="alipay"><i class="iconfont iconalipay"></i></a>
+    <a href="javascript:;" id="wechat"><i class="iconfont iconwechat-fill"></i></a>
+  </div>
+</section>
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a href="/2020/10/11/%E9%97%AD%E5%8C%85/"><i class="iconfont iconleft"></i>闭包</a>
+    <a href="/2020/10/11/Vue%E6%BA%90%E7%A0%81(%E4%BA%8C)%20%E2%80%94%E2%80%94%20%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%E4%B8%8E%E6%B4%BE%E5%8F%91%E6%9B%B4%E6%96%B0/">Vue源码(二) —— 依赖收集与派发更新<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="tencent://message/?Menu=yes&uin=894519210 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="javascript:; "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#09BB07'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconwechat-fill "></i>
+      </a><a 
+        href="https://www.instagram.com/izhaoo/ "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#DA2E76'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconinstagram "></i>
+      </a><a 
+        href="https://github.com/zhaoo "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:izhaoo@163.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>

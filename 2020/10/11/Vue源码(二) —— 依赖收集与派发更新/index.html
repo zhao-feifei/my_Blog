@@ -6,13 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Vue源码——响应式原理 - Hexo</title>
+  <title>Vue源码(二) —— 依赖收集与派发更新 - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
   <meta name="description" content="Vue的响应式实现原理 
-引言：  在使用Vue进行开...">
+引言：​    在上一篇博客...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -153,7 +153,7 @@
       
       
     </div>
-    <div class="center">Vue源码——响应式原理</div>
+    <div class="center">Vue源码(二) —— 依赖收集与派发更新</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -197,11 +197,11 @@
     <section class="head">
   <img   class="lazyload" data-original="/images/12/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">Vue源码——响应式原理</h1>
+    <h1 class="head-title">Vue源码(二) —— 依赖收集与派发更新</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1785</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1910</span>
     </div>
   </div>
 </section>
@@ -211,11 +211,11 @@
           <p><p>Vue的响应式实现原理</p>
         
         </p>
-<h5 id="引言："><a href="#引言：" class="headerlink" title="引言："></a>引言：</h5><p>  在使用<code>Vue</code>进行开发时，我们仅需关注数据本身，修改数据后视图会自动更新,省去了”手动操作DOM重新渲染”这一步,这一步看上去并不复杂，但需要考虑的问题很多，比如：哪些DOM需要被修改？每次数据变更都需要修改吗？修改的效率与性能如何？几个问题 Vue 内部就帮我们做了，那么 Vue 是如何在我们对数据修改后自动做这些事情呢？这几篇博客将深入<code>Vue</code>核心源码，看看<code>Vue</code>底层细节。</p>
-<h5 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h5><p>  这是<code>Vue</code>在github上的官方仓库<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue">点我跳转至源代码</a>，<code>src/core</code>文件夹下的代码是<code>Vue</code>项目的核心源码，支持在线查看，也可以下载到本地方便做笔记。</p>
-<h4 id="一-Object-defineProperty"><a href="#一-Object-defineProperty" class="headerlink" title="一. Object.defineProperty"></a>一. Object.defineProperty</h4><p>  实现响应式的核心是利用了ES5的<code>Object.defineProperty</code>方法，这也是为什么 Vue.js 不能兼容 IE8 及以下浏览器的原因，这个方法的基本使用不做介绍，具体可参考MDN文档<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">点我跳转至MDN文档</a>，需要注意的是 <code>get</code> 和 <code>set</code>，<code>get</code> 是一个给属性提供的 getter 方法，当我们访问了该属性的时候会触发 getter 方法；<code>set</code> 是一个给属性提供的 setter 方法，当我们对该属性做修改的时候会触发 setter 方法。OK我们来看一个例子：</p>
-<p><img   class="lazyload" data-original="/images/12/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>  当我们访问<code>obj.a</code>时，打印<code>有人读取了a属性</code>并返回1，设置新的值时，打印<code>属性a被设置成了新值</code>。这相当于我们自定义了<code>obj.a</code>取值和赋值的行为，使用自定义的<code>getter</code>和<code>setter</code>来重写了原有的行为，这也就是<code>数据劫持</code>的含义。在访问或者修改对象的某个属性时，我们可以进行额外的操作或者修改返回结果。一旦对象拥有了 getter 和 setter，我们可以简单地把这个对象称为响应式对象。vue源码中将其封装成了<strong>defineReactive</strong>方法。</p>
+<h5 id="引言："><a href="#引言：" class="headerlink" title="引言："></a>引言：</h5><p>​    在上一篇博客中，我们已经知道了如何实现数据劫持，聪明的你可能会想到只要在setter中触发页面渲染即可实现数据更新——页面渲染，确实可以，那么代价呢？任何数据的变化都会引起页面的重新渲染，即使这个数据没在页面上使用过，这很不合理。在数据变化时，我们只想让与其有关的<code>DOM</code>结构进行更新，于是<code>Vue</code>使用了依赖收集与派发更新来实现这种效果。</p>
+<h4 id="一-发布——订阅模式"><a href="#一-发布——订阅模式" class="headerlink" title="一. 发布——订阅模式"></a>一. 发布——订阅模式</h4><p>  OK我们先来看一种常见的设计模式：<strong>发布——订阅模式</strong>，啥是发布订阅？举一个例子：我去书店买书，但是我想买的书已售罄，怎么办？我不可能每隔一小时都来书店问一次，于是老板说：”小赵啊，你在纸条上留个电话，进货了我通知你”。这就是所谓的发布订阅，它其实是一种对象间一对多的依赖关系，当一个对象的状态发送改变时，所有依赖于它的对象都将得到状态改变的通知（可以有很多个买书人在纸条上留电话）。</p>
+<p><img   class="lazyload" data-original="/images/13/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>  <code>Vue</code>响应式系统中，也用到了发布订阅模式。上个例子的书相当于数据，我相当于<code>Watcher</code>类的一个实例，书就是我的依赖，当依赖发生变化时，<code>Watcher</code>实例会被通知，而<code>Watcher</code>实例在收到通知后便可以执行回调。</p>
+<p><img   class="lazyload" data-original="/images/13/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <h4 id="二-observe"><a href="#二-observe" class="headerlink" title="二.  observe"></a>二.  observe</h4><p><code>observe</code>方法定义在 <code>src/core/observer/index.js</code> 中,功能就是用来监测数据的变化,首先给非 VNode 的对象类型数据添加一个 <code>Observer</code>，如果已经添加过则直接返回，否则在满足一定条件下去实例化一个 <code>Observer</code> 对象实例，下面是<code>observe</code>方法的代码：</p>
 <p><img   class="lazyload" data-original="/images/12/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <h4 id="三-Observer"><a href="#三-Observer" class="headerlink" title="三. Observer"></a>三. Observer</h4><p><img   class="lazyload" data-original="/images/12/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
@@ -224,17 +224,22 @@
 <p><code>def</code> 函数也是对<code>Object.defineProperty</code> 方法的封装，在添加<code>__ob__</code> 属性的同时将其设置为不可枚举属性。接下来会对 <code>value</code> 类型做判断，如果是数组会调用 <code>observeArray</code> 方法，否则对纯对象调用 <code>walk</code> 方法。其中<code>observeArray</code> 是遍历数组再次调用 <code>observe</code> 方法，而 <code>walk</code> 方法是遍历对象的 key 调用 <code>defineReactive</code> 方法。</p>
 <h4 id="四-defineReactive"><a href="#四-defineReactive" class="headerlink" title="四. defineReactive"></a>四. defineReactive</h4><p>前面提到<code>defineReactive</code>方法是对<code>Object.defineProperty</code>方法的封装，在<code>defineReactive</code>方法中，对子对象递归调用 <code>observe</code> 方法，这样就保证了无论 <code>obj</code> 的结构多复杂，它的所有子属性也能变成响应式的对象，这样我们访问或修改 <code>obj</code> 中一个嵌套较深的属性，也能触发 getter 和 setter。</p>
 <p><img   class="lazyload" data-original="/images/12/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>可以看到里面有一个toString方法，这个方法是系统内置的，我们通过原型链可以调用。OK我们已经得到答案了，<font color='red'> 当读取实例的属性时，如果找不到，就会查找与对象关联的原型中的属性，如果还查不到，就去找原型的原型，一直找到最顶层为止</font>。这个玩意儿就是原型链。</p>
-<p>在图中标注一下：</p>
-<p><img   class="lazyload" data-original="/images/9/12.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>回到我们开始的问题，这玩意儿有啥用？简单概况一句话：<font color='red'> 共享数据,节省内存空间</font>。假如在构造函数中定义属性及方法,仅仅是编写代码进行定义而已,而实际上里面定义的属性及方法是属于每个实例对象的,所以,创建多个对象,就会开辟多个内存空间,每块空间中的每个对象都有自己的属性及方法,大量创建对象,对象的方法都不是同一个方法(方法也是函数,函数代码也占用空间),为了节省内存空间,那么可以使用原型的方式,实现数据共享,节省内存空间。</p>
+<h4 id="五-总结"><a href="#五-总结" class="headerlink" title="五. 总结"></a>五. 总结</h4><p>可能有点乱，重新捋一捋，observe，Observer，defineReactive三者关系如下：</p>
+<p><img   class="lazyload" data-original="/images/12/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>这三个函数互相调用，形成递归，举个例子，对于下面这个对象obj</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const obj = &#123;</span><br><span class="line">  a: 1,</span><br><span class="line">  b: &#123;</span><br><span class="line">    c: 2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会有以下操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">执行observe(obj)</span><br><span class="line">├─ new Observer(obj),并执行this.walk遍历obj的属性，执行defineReactive</span><br><span class="line">    ├─ defineReactive(obj, a)</span><br><span class="line">        ├─ 执行observe(obj.a) 发现obj.a不是对象，直接返回</span><br><span class="line">        ├─ 执行defineReactive(obj, a) 的剩余代码</span><br><span class="line">    ├─ defineReactive(obj, b) </span><br><span class="line">	    ├─ 执行observe(obj.b) 发现obj.b是对象</span><br><span class="line">	        ├─ 执行 new Observer(obj.b)，遍历obj.b的属性，执行defineReactive</span><br><span class="line">                    ├─ 执行defineReactive(obj.b, c)</span><br><span class="line">                        ├─ 执行observe(obj.b.c) 发现obj.b.c不是对象，直接返回</span><br><span class="line">                        ├─ 执行defineReactive(obj.b, c)的剩余代码</span><br><span class="line">            ├─ 执行defineReactive(obj, b)的剩余代码</span><br><span class="line">结束</span><br></pre></td></tr></table></figure>
+
+<p>OK，至此我们已经知道了Vue底层是如何对数据进行劫持将其变为响应式。</p>
       </section>
       <section class="extra">
         
           <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
-    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/Vue%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Vue%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Vue%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/Vue%E6%BA%90%E7%A0%81(%E4%BA%8C)%20%E2%80%94%E2%80%94%20%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%E4%B8%8E%E6%B4%BE%E5%8F%91%E6%9B%B4%E6%96%B0/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Vue%E6%BA%90%E7%A0%81(%E4%BA%8C)%20%E2%80%94%E2%80%94%20%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%E4%B8%8E%E6%B4%BE%E5%8F%91%E6%9B%B4%E6%96%B0&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Vue%E6%BA%90%E7%A0%81(%E4%BA%8C)%20%E2%80%94%E2%80%94%20%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86%E4%B8%8E%E6%B4%BE%E5%8F%91%E6%9B%B4%E6%96%B0&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul>
@@ -255,7 +260,7 @@
 
         
   <nav class="nav">
-    <a href="/2020/10/11/%E9%97%AD%E5%8C%85/"><i class="iconfont iconleft"></i>闭包</a>
+    <a href="/2020/10/11/Vue%E6%BA%90%E7%A0%81(%E4%B8%80)%20%E2%80%94%E2%80%94%20%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/"><i class="iconfont iconleft"></i>Vue源码(一) —— 响应式原理</a>
     <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
   </nav>
 
