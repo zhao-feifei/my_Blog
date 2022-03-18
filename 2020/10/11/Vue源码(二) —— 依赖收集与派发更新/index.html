@@ -201,7 +201,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1910</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1308</span>
     </div>
   </div>
 </section>
@@ -211,28 +211,25 @@
           <p><p>Vue的响应式实现原理</p>
         
         </p>
-<h5 id="引言："><a href="#引言：" class="headerlink" title="引言："></a>引言：</h5><p>​    在上一篇博客中，我们已经知道了如何实现数据劫持，聪明的你可能会想到只要在setter中触发页面渲染即可实现数据更新——页面渲染，确实可以，那么代价呢？任何数据的变化都会引起页面的重新渲染，即使这个数据没在页面上使用过，这很不合理。在数据变化时，我们只想让与其有关的<code>DOM</code>结构进行更新，于是<code>Vue</code>使用了依赖收集与派发更新来实现这种效果。</p>
+<h5 id="引言："><a href="#引言：" class="headerlink" title="引言："></a>引言：</h5><p>​    在上一篇博客中，我们已经知道了如何实现数据劫持，聪明的你可能会想到只要在setter中触发页面渲染即可实现数据更新——页面渲染，确实可以，那么代价呢？任何数据的变化都会引起页面的重新渲染，即使这个数据没在页面上使用过，这很不合理。在数据变化时，我们只想让与其有关的<code>DOM</code>结构进行更新，于是<code>Vue</code>使用了依赖收集与派发更新来实现这种效果。下面是Vue官方的一张图，非常清晰地展示了<code>Vue</code>中依赖收集与派发更新的过程。</p>
+<p><img   class="lazyload" data-original="/images/13/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <h4 id="一-发布——订阅模式"><a href="#一-发布——订阅模式" class="headerlink" title="一. 发布——订阅模式"></a>一. 发布——订阅模式</h4><p>  OK我们先来看一种常见的设计模式：<strong>发布——订阅模式</strong>，啥是发布订阅？举一个例子：我去书店买书，但是我想买的书已售罄，怎么办？我不可能每隔一小时都来书店问一次，于是老板说：”小赵啊，你在纸条上留个电话，进货了我通知你”。这就是所谓的发布订阅，它其实是一种对象间一对多的依赖关系，当一个对象的状态发送改变时，所有依赖于它的对象都将得到状态改变的通知（可以有很多个买书人在纸条上留电话）。</p>
 <p><img   class="lazyload" data-original="/images/13/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>  <code>Vue</code>响应式系统中，也用到了发布订阅模式。上个例子的书相当于数据，我相当于<code>Watcher</code>类的一个实例，书就是我的依赖，当依赖发生变化时，<code>Watcher</code>实例会被通知，而<code>Watcher</code>实例在收到通知后便可以执行回调。</p>
 <p><img   class="lazyload" data-original="/images/13/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<h4 id="二-observe"><a href="#二-observe" class="headerlink" title="二.  observe"></a>二.  observe</h4><p><code>observe</code>方法定义在 <code>src/core/observer/index.js</code> 中,功能就是用来监测数据的变化,首先给非 VNode 的对象类型数据添加一个 <code>Observer</code>，如果已经添加过则直接返回，否则在满足一定条件下去实例化一个 <code>Observer</code> 对象实例，下面是<code>observe</code>方法的代码：</p>
-<p><img   class="lazyload" data-original="/images/12/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<h4 id="三-Observer"><a href="#三-Observer" class="headerlink" title="三. Observer"></a>三. Observer</h4><p><img   class="lazyload" data-original="/images/12/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>在Observer构造函数中，通过执行 <code>def</code> 函数把自身实例添加到数据对象 <code>value</code> 的 <code>__ob__</code> 属性上,<code>def</code> 的定义在 <code>src/core/util/lang.js</code> 中</p>
-<p><img   class="lazyload" data-original="/images/12/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p><code>def</code> 函数也是对<code>Object.defineProperty</code> 方法的封装，在添加<code>__ob__</code> 属性的同时将其设置为不可枚举属性。接下来会对 <code>value</code> 类型做判断，如果是数组会调用 <code>observeArray</code> 方法，否则对纯对象调用 <code>walk</code> 方法。其中<code>observeArray</code> 是遍历数组再次调用 <code>observe</code> 方法，而 <code>walk</code> 方法是遍历对象的 key 调用 <code>defineReactive</code> 方法。</p>
-<h4 id="四-defineReactive"><a href="#四-defineReactive" class="headerlink" title="四. defineReactive"></a>四. defineReactive</h4><p>前面提到<code>defineReactive</code>方法是对<code>Object.defineProperty</code>方法的封装，在<code>defineReactive</code>方法中，对子对象递归调用 <code>observe</code> 方法，这样就保证了无论 <code>obj</code> 的结构多复杂，它的所有子属性也能变成响应式的对象，这样我们访问或修改 <code>obj</code> 中一个嵌套较深的属性，也能触发 getter 和 setter。</p>
-<p><img   class="lazyload" data-original="/images/12/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<h4 id="五-总结"><a href="#五-总结" class="headerlink" title="五. 总结"></a>五. 总结</h4><p>可能有点乱，重新捋一捋，observe，Observer，defineReactive三者关系如下：</p>
-<p><img   class="lazyload" data-original="/images/12/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>这三个函数互相调用，形成递归，举个例子，对于下面这个对象obj</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const obj = &#123;</span><br><span class="line">  a: 1,</span><br><span class="line">  b: &#123;</span><br><span class="line">    c: 2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>会有以下操作：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">执行observe(obj)</span><br><span class="line">├─ new Observer(obj),并执行this.walk遍历obj的属性，执行defineReactive</span><br><span class="line">    ├─ defineReactive(obj, a)</span><br><span class="line">        ├─ 执行observe(obj.a) 发现obj.a不是对象，直接返回</span><br><span class="line">        ├─ 执行defineReactive(obj, a) 的剩余代码</span><br><span class="line">    ├─ defineReactive(obj, b) </span><br><span class="line">	    ├─ 执行observe(obj.b) 发现obj.b是对象</span><br><span class="line">	        ├─ 执行 new Observer(obj.b)，遍历obj.b的属性，执行defineReactive</span><br><span class="line">                    ├─ 执行defineReactive(obj.b, c)</span><br><span class="line">                        ├─ 执行observe(obj.b.c) 发现obj.b.c不是对象，直接返回</span><br><span class="line">                        ├─ 执行defineReactive(obj.b, c)的剩余代码</span><br><span class="line">            ├─ 执行defineReactive(obj, b)的剩余代码</span><br><span class="line">结束</span><br></pre></td></tr></table></figure>
-
-<p>OK，至此我们已经知道了Vue底层是如何对数据进行劫持将其变为响应式。</p>
+<p>OK，接下来我们看看<code>Vue</code>是如何利用发布订阅模式进行依赖收集与派发更新的。</p>
+<h4 id="二-依赖收集与派发更新"><a href="#二-依赖收集与派发更新" class="headerlink" title="二.  依赖收集与派发更新"></a>二.  依赖收集与派发更新</h4><p><code>Vue</code>源码中为了实现依赖收集与派发更新使用了两个类：<code>Dep</code>类和<code>Watcher</code>类。这两个类的实例关系如下图：</p>
+<p><img   class="lazyload" data-original="/images/13/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>下面我们来看看这两个类具体做了什么。（为了方便说明，这两个类都用了简化版代码）</p>
+<h5 id="1-Dep类"><a href="#1-Dep类" class="headerlink" title="1. Dep类"></a>1. Dep类</h5><p><img   class="lazyload" data-original="/images/13/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>每个数据都会维护属于自己的一个<code>Dep</code>实例用来管理所有依赖，实例中使用<code>subs</code>来保存所有依赖此数据的订阅者。那么，<code>Dep</code>实例与数据是如何关联起来的呢？答案是<code>闭包</code>，在第一节介绍的<code>defineReactive</code>函数中，有这样一行代码：<code>const dep = new Dep()</code>,这样每个值都都会有自己的依赖对象<code>dep</code>。每个<code>Dep</code>实例都有两个方法：</p>
+<ol>
+<li><code>addSub</code> 方法可以在目前的 <code>Dep</code> 对象中增加一个 <code>Watcher</code> 的订阅操作</li>
+<li> <code>notify</code> 方法通知目前 <code>Dep</code> 对象的 <code>subs</code> 中的所有 <code>Watcher</code> 对象触发更新操作。</li>
+</ol>
+<h5 id="2-Watcher类"><a href="#2-Watcher类" class="headerlink" title="2. Watcher类"></a>2. Watcher类</h5><p><img   class="lazyload" data-original="/images/13/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h5 id="3-具体过程"><a href="#3-具体过程" class="headerlink" title="3. 具体过程"></a>3. 具体过程</h5><p>前面做了这么多铺垫，接下来重点分析一下<strong>依赖收集</strong>的过程：渲染引擎解析模板时，引擎遇到了一个插值表达式，此时实例化一个<code>watcher</code>，从<code>Watcher</code>的代码中可以看到，实例化时会执行<code>get</code>方法，<code>get</code>方法的作用就是<code>读取</code>自己依赖的数据。前面我们已经分析过<code>defineReactive</code>函数的作用，在对象被「读」的时候，会触发 <code>getter</code> ，而我们重写数据的读取行为，在<code>getter</code>函数执行时，在<code>getter</code>中把当前的<code>watcher</code>添加到闭包的<code>dep</code>数组中，即可完成依赖收集。之后当该对象被「写」的时候，则会触发 <code>setter</code> 方法，通知 <code>Dep</code> 类调用 <code>notify</code> 来触发所有 <code>Watcher</code> 对象的 <code>update</code> 方法即可更新对应视图。真TM妙哇!  </p>
+<p><img   class="lazyload" data-original="/images/13/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
       </section>
       <section class="extra">
         
