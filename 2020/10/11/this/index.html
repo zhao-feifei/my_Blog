@@ -201,7 +201,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1257</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1891</span>
     </div>
   </div>
 </section>
@@ -224,12 +224,29 @@
 <p><img   class="lazyload" data-original="/images/14/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 </li>
 <li><p><strong>隐式绑定</strong></p>
+<p>当函数调用位置有上下文对象时，<code>this</code>指向当前上下文对象。</p>
+<p><img   class="lazyload" data-original="/images/14/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>注意，上面这个例子中<code>foo</code>函数声明在全局作用域中，之后又被当作引用属性添加到 obj 中，当函数引 用有上下文对象时，隐式绑定规则会把函数调用中的 this 绑定到这个上下文对象。因为调 用 foo() 时 this 被绑定到 obj，因此 this.a 和 obj.a 是一样的。而且对象属性引用链中只有最顶层或者说最后一层会影响调用位置，比如下面这段代码：</p>
+<p><img   class="lazyload" data-original="/images/14/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>被隐式绑定的函数有时会丢失绑定对象，例如：</p>
+<p><img   class="lazyload" data-original="/images/14/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>虽然 <code>bar</code> 是<code> obj.foo</code> 的一个引用，但是实际上，它引用的是 <code>foo</code> 函数本身，此此时的 <code>bar</code> 其实是一个不带任何修饰的函数调用，因此应用了默认绑定。</p>
 </li>
 <li><p><strong>显式绑定</strong></p>
+<p>如果我们想在某个对象上强制调用函数，可以使用原型上的<code>call</code>,<code>apply</code>,<code>bind</code>方法，以<code>call</code>方法为例：</p>
+<p><img   class="lazyload" data-original="/images/14/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>通过使用<code>call</code>方法，我们在调用<code>foo</code>时强制把它的<code>this</code>绑定到<code>obj</code>上。</p>
 </li>
 <li><p><strong>New绑定</strong></p>
+<p>首先，要确定的是，在传统的面向类的语言中，“构造函数”是类中的一些特殊方法，使用 new 初始化类时会调用类中的构造函数。而<code>JS</code>中的<code>new</code>机制和其他语言完全不同。在使用<code>new</code>来调用函数时，会执行以下操作：</p>
+<p>（1）创建一个全新的对象</p>
+<p>（2）把对象与构造函数通过<code>原型链</code>连接起来</p>
+<p>（3）将函数中的<code>this</code>指向此对象</p>
+<p>（4）如果没有返回其他对象，则自动返回创建的新对象</p>
 </li>
 </ol>
+<p>​        可以看到<code>new</code>操作符可以影响<code>this</code>的绑定行为，例如以下代码：</p>
+<p><img   class="lazyload" data-original="/images/14/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <h4 id="四-defineReactive"><a href="#四-defineReactive" class="headerlink" title="四. defineReactive"></a>四. defineReactive</h4><p>前面提到<code>defineReactive</code>方法是对<code>Object.defineProperty</code>方法的封装，在<code>defineReactive</code>方法中，对子对象递归调用 <code>observe</code> 方法，这样就保证了无论 <code>obj</code> 的结构多复杂，它的所有子属性也能变成响应式的对象，这样我们访问或修改 <code>obj</code> 中一个嵌套较深的属性，也能触发 getter 和 setter。</p>
 <p><img   class="lazyload" data-original="/images/12/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <h4 id="五-总结"><a href="#五-总结" class="headerlink" title="五. 总结"></a>五. 总结</h4><p>可能有点乱，重新捋一捋，observe，Observer，defineReactive三者关系如下：</p>
@@ -268,8 +285,8 @@
 
         
   <nav class="nav">
-    <a href="/2020/10/11/%E9%97%AD%E5%8C%85/"><i class="iconfont iconleft"></i>闭包</a>
-    <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/git%E7%AC%94%E8%AE%B0/"><i class="iconfont iconleft"></i>git笔记</a>
+    <a href="/2020/10/11/%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/">基本类型和引用类型的比较<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
