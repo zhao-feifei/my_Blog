@@ -6,13 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>如何交换两个变量？ - Hexo</title>
+  <title>函数柯里化 - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
-  <meta name="keywords" content=", 位运算">
-  <meta name="description" content="javascript中交换两个变量的几种方法
-1.  ...">
+  <meta name="keywords" content=", 算法">
+  <meta name="description" content="JS中的高阶函数与函数柯里化 
+一. 高阶函数​   ...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -153,7 +153,7 @@
       
       
     </div>
-    <div class="center">如何交换两个变量？</div>
+    <div class="center">函数柯里化</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -195,38 +195,68 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="/images/1/code.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/15/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">如何交换两个变量？</h1>
+    <h1 class="head-title">函数柯里化</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>545</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>868</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-          <p><p>javascript中交换两个变量的几种方法</p>
+          <p><p>JS中的高阶函数与函数柯里化</p>
         
         </p>
-<h4 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h4><p>  第一种方法，使用一个临时变量temp来保存变量的值，这是最常用的方法，但是会多占用一个变量的内存空间。</p>
-<p><img   class="lazyload" data-original="/images/1/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<h4 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h4><p>第二种方法，不需要额外的空间，直接使用加减运算即可交换两个变量的值，具体操作如下：</p>
-<p><img   class="lazyload" data-original="/images/1/code.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p> 同样的，这种方法也有缺陷，众所周知，在JavaScript语言中，0.1+0.2不等于0.3（等于 0.30000000000000004，原因暂且不谈)，因此在进行浮点数运算时，可能会导致结果有偏差。</p>
-<h4 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h4><p>第三种方法，利用数组进行交换，在下图中，第一行代码利用ES6的解构赋值语法，优雅又清晰第二行代码非常巧妙，首先会执行b=a，此时a的值赋值给了b，再利用索引将第一个元素赋值给a，那么就完成了变量的交换。同样的，利用对象进行交换的方法与数组类似。</p>
-<p><img   class="lazyload" data-original="/images/1/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<h4 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h4><p>第四种方法，位运算，程序中的数在内存中都是以二进制的形式进行存储的，位运算正是利用了这一点，这里拿3和5进行举例，3的二进制表示是0011，5的二进制表示是0101，将0011与0101进行按位<font color=#FF0000> <strong>异或</strong> </font>运算，得到0110并赋值给a，再对0101和0110进行按位<font color=#FF0000> <strong>异或</strong> </font>运算，得到0011并赋值给a，最后对0110和0011按位<font color=#FF0000> <strong>异或</strong> </font>运算，得到0101，此时便完成了交换。</p>
-<p><img   class="lazyload" data-original="/images/1/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="一-高阶函数"><a href="#一-高阶函数" class="headerlink" title="一. 高阶函数"></a>一. 高阶函数</h4><p>​    在JS中函数是一等公民，函数可以作为参数传递给其他函数，因此函数十分灵活。先来看看高阶函数的定义：</p>
+<blockquote>
+<p>在数学和计算机科学中，高阶函数是至少满足下列一个条件的函数：</p>
+<ol>
+<li>接受一个或多个函数作为输入</li>
+<li>输出一个函数</li>
+</ol>
+</blockquote>
+<p>其实之前已经使用过很多高阶函数了，常见的<code>settimeout</code>,<code>map</code>等</p>
+<p><img   class="lazyload" data-original="/images/15/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>本篇主要介绍一种高阶函数的应用——函数柯里化</p>
+<h4 id="二-柯里化"><a href="#二-柯里化" class="headerlink" title="二. 柯里化"></a>二. 柯里化</h4><ol>
+<li><p>啥是柯里化args</p>
+<blockquote>
+<p>在数学和计算机科学中，柯里化是一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术。</p>
+</blockquote>
+<p>我们来看一个简单的例子：假设我们有一个普通的求和函数<code>add</code></p>
+<p><img   class="lazyload" data-original="/images/15/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>这个函数一次接收四个参数，而此函数经过柯里化后，可以分多次接收参数并返回结果，比如这样：</p>
+<p><img   class="lazyload" data-original="/images/15/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</li>
+<li><p>实现currying函数</p>
+<p>OK我们来实现一下<code>currying</code>函数,由于参数是分批传入的，我们需要在<code>currying</code>函数内部判断已传入的参数数量与原函数形参的数量是否相等，此外，返回值肯定是一个函数，那么我们可以写出以下代码：</p>
+<p><img   class="lazyload" data-original="/images/15/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>如果参数够了，直接返回原函数即可，如果没够则需要在返回单函数中递归调用<code>currying</code>函数，并将新的参数传入：</p>
+<p><img   class="lazyload" data-original="/images/15/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</li>
+<li><p>升级版</p>
+<p>假如参数不定长呢？实现方式和上面的例子类似，只需使用数组收集参数即可：</p>
+<p><img   class="lazyload" data-original="/images/15/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</li>
+</ol>
+<h4 id="三-应用"><a href="#三-应用" class="headerlink" title="三. 应用"></a>三. 应用</h4><p>又回到了老问题，这玩意有啥用？柯里化的作用主要是<code>延迟执行</code>,<code>参数复用</code>,延迟执行很好理解，比如第二节中的例子，当参数个数达到一定条件时或者我们主动调用时，函数才会执行。下面来看一个参数复用的例子，我们有时候需要校验电话号码或者邮箱地址等，通常我们会封装一个函数，分别接收校验的正则对象与被校验的字符串，比如以下代码：</p>
+<p><img   class="lazyload" data-original="/images/15/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>校验数量少时，上面这种方法还可以，一但需要校验的字符串变多时，代码就会变成这样：</p>
+<p><img   class="lazyload" data-original="/images/15/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>这样显然不够优雅，此时，<strong>柯里化</strong>的作用就体现出来了，我们使用柯里化后的函数生成专门的工具函数，只负责一种类型的校验，比如这样：</p>
+<p><img   class="lazyload" data-original="/images/15/9.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>这两个工具函数与原函数相比，<code>通用性降低，适用性提升</code>,而且代码足够优雅，规范，岂不美哉？</p>
       </section>
       <section class="extra">
         
           <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
-    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E5%A6%82%E4%BD%95%E4%BA%A4%E6%8D%A2%E4%B8%A4%E4%B8%AA%E5%8F%98%E9%87%8F%EF%BC%9F/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%A6%82%E4%BD%95%E4%BA%A4%E6%8D%A2%E4%B8%A4%E4%B8%AA%E5%8F%98%E9%87%8F%EF%BC%9F&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%A6%82%E4%BD%95%E4%BA%A4%E6%8D%A2%E4%B8%A4%E4%B8%AA%E5%8F%98%E9%87%8F%EF%BC%9F&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul>
@@ -243,12 +273,12 @@
 </section>
         
         
-  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul> 
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul> 
 
         
   <nav class="nav">
-    <a href="/2020/10/11/%E5%8E%9F%E5%9E%8B%E4%B8%8E%E5%8E%9F%E5%9E%8B%E9%93%BE/"><i class="iconfont iconleft"></i>原型与原型链</a>
-    <a href="/2020/10/11/%E5%B0%8F%E6%95%B0%E8%AE%A1%E7%AE%97%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/">为什么 0.1+0.2！=0.3 ?<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B/"><i class="iconfont iconleft"></i>基本类型和引用类型的比较</a>
+    <a href="/2020/10/11/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/">动态规划入门<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
