@@ -6,13 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>组件通信总结 - Hexo</title>
+  <title>生命周期钩子 - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
-  <meta name="description" content="JS中的高阶函数与函数柯里化 
-一. 高阶函数​   ...">
+  <meta name="description" content="Vue中的生命周期钩子
+写在前面万物皆有自己的生命周期...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -153,7 +153,7 @@
       
       
     </div>
-    <div class="center">组件通信总结</div>
+    <div class="center">生命周期钩子</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -197,59 +197,156 @@
     <section class="head">
   <img   class="lazyload" data-original="/images/17/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">组件通信总结</h1>
+    <h1 class="head-title">生命周期钩子</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>864</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1561</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-          <p><p>JS中的高阶函数与函数柯里化</p>
+          <p><p>Vue中的生命周期钩子</p>
         
         </p>
-<h4 id="一-高阶函数"><a href="#一-高阶函数" class="headerlink" title="一. 高阶函数"></a>一. 高阶函数</h4><p>​    在JS中函数是一等公民，函数可以作为参数传递给其他函数，因此函数十分灵活。先来看看高阶函数的定义：</p>
+<h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>万物皆有自己的生命周期，<code>Vue</code>也一样，每个 <code>Vue</code> 实例在被创建时都要经过一系列的初始化过程——例如，需要设置数据监听、编译模板、将实例挂载到 <code>DOM</code> 并在数据变化时更新  <code>DOM</code> 等。同时在这个过程中也会运行一些叫做<strong>生命周期钩子</strong>的函数，这给了开发者在不同阶段添加自己的代码的机会。下面是<code>Vue</code>官方给出的生命周期图示：</p>
+<p><img   class="lazyload" data-original="/images/17/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h4 id="八个生命周期钩子"><a href="#八个生命周期钩子" class="headerlink" title="八个生命周期钩子"></a>八个生命周期钩子</h4><ol>
+<li><p><strong>创建阶段</strong></p>
+<ul>
+<li><p><code>beforeCreate</code></p>
 <blockquote>
-<p>在数学和计算机科学中，高阶函数是至少满足下列一个条件的函数：</p>
-<ol>
-<li>接受一个或多个函数作为输入</li>
-<li>输出一个函数</li>
-</ol>
+<p><code>new Vue()</code>之后触发的第一个钩子，此时 <code>data</code>、<code>methods</code>、<code>computed</code>以及<code>watch</code>上的数据和方法还未初始化，都不能被访问。可以进行与数据无关的操作。</p>
 </blockquote>
-<p>其实之前已经使用过很多高阶函数了，常见的<code>settimeout</code>,<code>map</code>等</p>
-<p><img   class="lazyload" data-original="/images/15/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>本篇主要介绍一种高阶函数的应用——函数柯里化</p>
-<h4 id="二-柯里化"><a href="#二-柯里化" class="headerlink" title="二. 柯里化"></a>二. 柯里化</h4><ol>
-<li><p>啥是柯里化</p>
+</li>
+<li><p><code>created</code></p>
 <blockquote>
-<p>在数学和计算机科学中，柯里化是一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术。</p>
+<p>在实例创建完成后被立即调用，此时已完成以下的配置：数据观测 (data observer)，watch/event 事件回调。然而，挂载阶段还没开始，<code>$el</code>目前仍然是<code>undefinde</code>，但已经可以操作<code>data</code>与<code>methods</code>，在这里更改数据不会触发<code>updated</code>函数。</p>
 </blockquote>
-<p>我们来看一个简单的例子：假设我们有一个普通的求和函数<code>add</code></p>
-<p><img   class="lazyload" data-original="/images/15/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>这个函数一次接收四个参数，而此函数经过柯里化后，可以分多次接收参数并返回结果，比如这样：</p>
-<p><img   class="lazyload" data-original="/images/15/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 </li>
-<li><p>实现currying函数</p>
-<p>OK我们来实现一下<code>currying</code>函数,由于参数是分批传入的，我们需要在<code>currying</code>函数内部判断已传入的参数数量与原函数形参的数量是否相等，此外，返回值肯定是一个函数，那么我们可以写出以下代码：</p>
-<p><img   class="lazyload" data-original="/images/15/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>如果参数够了，直接返回原函数即可，如果没够则需要在返回单函数中递归调用<code>currying</code>函数，并将新的参数传入：</p>
-<p><img   class="lazyload" data-original="/images/15/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</ul>
 </li>
-<li><p>升级版</p>
-<p>假如参数不定长呢？实现方式和上面的例子类似，只需使用数组收集参数即可：</p>
-<p><img   class="lazyload" data-original="/images/15/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<li><p><strong>挂载阶段</strong></p>
+<ul>
+<li><p><code>beforeMount</code></p>
+<blockquote>
+<p>发生在挂载之前，在这之前 template 模板已导入渲染函数编译。此时虚拟Dom已经创建完成，即将开始渲染。在这一阶段也可以对数据进行更改，不会触发updated。执行到这个钩子的时候，在内存中已经编译好了模板了，但是还没有挂载到页面中，此时，页面还是旧的。</p>
+</blockquote>
+</li>
+<li><p><code>mounted</code></p>
+<blockquote>
+<p>将页面从内存中渲染到<code>DOM</code>的操作完成，此时真实的DOM挂载完毕，数据完成双向绑定，可以访问到Dom节点，使用$refs属性对Dom进行操作。执行到这个钩子的时候，就表示vue实例已经初始化完成了。此时组件脱离了创建阶段，进入到了运行阶段。 如果想要操作页面上的DOM节点，最早可以在和这个阶段中进行。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>运行阶段</strong></p>
+<ul>
+<li><p><code>beforeUpdate</code></p>
+<blockquote>
+<p>发生在更新之前，此时<code>Vue</code>实例中数据已经是最新的，但是在页面中的数据还是旧的，可以在当前阶段进行更改数据，不会造成重新渲染,但会再次触发当前钩子函数。</p>
+</blockquote>
+</li>
+<li><p><code>updated</code></p>
+<blockquote>
+<p>发生在更新完成之后，此时 Dom 已经更新。现在可以执行依赖于 DOM 的操作。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>销毁阶段</strong></p>
+<ul>
+<li><p><code>beforeDestroy</code></p>
+<blockquote>
+<p>发生在实例销毁之前，在这期间实例完全可以被使用，我们可以在这时进行善后收尾工作，比如清除计时器。Vue实例从运行阶段进入到了销毁阶段，这个时候上所有的 data 和 methods ， 指令， 过滤器 ……都是处于可用状态。还没有真正被销毁。</p>
+</blockquote>
+</li>
+<li><p><code>destroyed</code></p>
+<blockquote>
+<p>发生在实例销毁之后，这个时候只剩下了dom空壳。组件已被拆解，数据绑定被卸除，事件监听器被移除，所有子实例也统统被销毁。</p>
+</blockquote>
+</li>
+</ul>
 </li>
 </ol>
-<h4 id="三-应用"><a href="#三-应用" class="headerlink" title="三. 应用"></a>三. 应用</h4><p>又回到了老问题，这玩意有啥用？柯里化的作用主要是<code>延迟执行</code>,<code>参数复用</code>,延迟执行很好理解，比如第二节中的例子，当参数个数达到一定条件时或者我们主动调用时，函数才会执行。下面来看一个参数复用的例子，我们有时候需要校验电话号码或者邮箱地址等，通常我们会封装一个函数，分别接收校验的正则对象与被校验的字符串，比如以下代码：</p>
-<p><img   class="lazyload" data-original="/images/15/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>校验数量少时，上面这种方法还可以，一但需要校验的字符串变多时，代码就会变成这样：</p>
-<p><img   class="lazyload" data-original="/images/15/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>这样显然不够优雅，此时，<strong>柯里化</strong>的作用就体现出来了，我们使用柯里化后的函数生成专门的工具函数，只负责一种类型的校验，比如这样：</p>
-<p><img   class="lazyload" data-original="/images/15/9.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>这两个工具函数与原函数相比，<code>通用性降低，适用性提升</code>,而且代码足够优雅，规范，岂不美哉？</p>
+<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><table>
+<thead>
+<tr>
+<th align="center">钩子函数</th>
+<th align="center">实例的状态</th>
+<th align="center">能否获取到$el</th>
+<th align="center">能否获取到data</th>
+<th align="center">能否获取到methods</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">beforeCreate</td>
+<td align="center">创建前</td>
+<td align="center">不能</td>
+<td align="center">不能</td>
+<td align="center">不能</td>
+<td align="center">实例已初始化，但数据观测，watch/event 事件回调还未配置</td>
+</tr>
+<tr>
+<td align="center">created</td>
+<td align="center">创建后</td>
+<td align="center">不能</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">已完成如下配置，数据观测 (data observer)，property 和方法的运算，watch/event 事件回调</td>
+</tr>
+<tr>
+<td align="center">beforeMount</td>
+<td align="center">挂载前</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">DOM已初始化，但并未挂载和渲染</td>
+</tr>
+<tr>
+<td align="center">mounted</td>
+<td align="center">挂载后</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">DOM已完成挂载和渲染</td>
+</tr>
+<tr>
+<td align="center">beforeUpdate</td>
+<td align="center">更新前</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">数据已改变，但DOM未更新</td>
+</tr>
+<tr>
+<td align="center">updated</td>
+<td align="center">更新后</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">DOM已更新</td>
+</tr>
+<tr>
+<td align="center">beforeDestroy</td>
+<td align="center">销毁前</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">实例销毁前，实例仍然可用</td>
+</tr>
+<tr>
+<td align="center">destroyed</td>
+<td align="center">销毁后</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">能</td>
+<td align="center">实例已销毁，所有指令被解绑，事件监听器被移除，子实例都被销毁</td>
+</tr>
+</tbody></table>
       </section>
       <section class="extra">
         
