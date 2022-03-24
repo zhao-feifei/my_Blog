@@ -12,8 +12,8 @@
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
   <meta name="description" content="React知识点记录
-一. 基础二.  绑定规则
-默认...">
+JSX
+ react定义的一种类...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -202,7 +202,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>959</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1896</span>
     </div>
   </div>
 </section>
@@ -212,7 +212,61 @@
           <p><p>React知识点记录</p>
         
         </p>
-<h4 id="一-基础"><a href="#一-基础" class="headerlink" title="一. 基础"></a>一. 基础</h4><h4 id="二-绑定规则"><a href="#二-绑定规则" class="headerlink" title="二.  绑定规则"></a>二.  绑定规则</h4><ol>
+<h4 id="JSX"><a href="#JSX" class="headerlink" title="JSX"></a>JSX</h4><ul>
+<li><p> <code>react</code>定义的一种类似于<code>XML</code>的<code>JS</code>扩展语法: <code>JS</code> +<code> XML</code>本质是<code>React.createElement(component ,props, ...children)</code>方法的语法糖</p>
+</li>
+<li><p>浏览器不能直接解析<code>JSX</code>代码, 需要<code>babel</code>转译为纯<code>JS</code>的代码才能运行,只要用了<code>JSX</code>，都要加上<code>type=&quot;text/babel&quot;</code>, 声明需要<code>babel</code>来处理</p>
+</li>
+<li><p>语法规则：</p>
+<blockquote>
+<p><em>jsx的语法规则：</em></p>
+<p>​       <em>1.创建虚拟DOM时，不要用引号。</em></p>
+<p>​       <em>2.标签中想混入js表达式，需要用{}包裹。</em></p>
+<p>​       <em>3.根标签必须只有一个</em></p>
+<p>​       <em>4.标签必须闭合</em></p>
+<p>​       <em>5.样式的类名，不要用class，必须用className</em></p>
+<p>​       <em>6.内联的样式要用 <code>style=&#123;&#123;&#125;&#125;</code>形式去写</em></p>
+<p>​       <em>7.标签可以随意的编写：</em></p>
+<p>​         (1).若标签首字母是  <strong>小写</strong>的，则react会尝试将当前的jsx标签对应成一个html标签</p>
+<p>​             若对应成了，直接渲染，展示。</p>
+<p>​             若无法对应，直接报错！</p>
+<p>​         (2).若标签首字母是<strong>大写</strong>的，则react会查找Haha组件的定义的位置</p>
+<p>​             若找见了，直接渲染Haha组件</p>
+<p>​             若未找见，报错(Haha is not defined)</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="this丢失问题"><a href="#this丢失问题" class="headerlink" title="this丢失问题"></a>this丢失问题</h4><ul>
+<li><p>在类组件里自定义方法中的<code>this</code>指向为<code>undefined</code>，解决方法有两个：</p>
+<p>（1）在<code>constructor</code>中通过函数的<code>bind</code>方法强制绑定<code>this</code></p>
+<p><img   class="lazyload" data-original="/images/18/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p> (2) 使用箭头函数</p>
+<p><img   class="lazyload" data-original="/images/18/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</li>
+</ul>
+<h4 id="state"><a href="#state" class="headerlink" title="state"></a>state</h4><ul>
+<li><p>更新<code>state</code>必须使用<code>setState</code>:</p>
+<p><img   class="lazyload" data-original="/images/18/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<blockquote>
+<p>注意：这种方式是合并而不是替换</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="props"><a href="#props" class="headerlink" title="props"></a>props</h4><ul>
+<li><p>向组件传递一组数据时，可以使用下面这种方法：</p>
+<p><img   class="lazyload" data-original="/images/18/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<blockquote>
+<p>注意：babel+react环境就可以让展开运算符展开一个对象，原生中扩展运算符并不支持展开对象。</p>
+</blockquote>
+</li>
+<li><p>需要对传入的属性进行限制时，在类中定义静态属性，比如这样：</p>
+<p><img   class="lazyload" data-original="/images/18/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<blockquote>
+<p>注意：<code>propTypes</code>和<code>PropTypes</code>不要搞错。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="二-绑定规则"><a href="#二-绑定规则" class="headerlink" title="二.  绑定规则"></a>二.  绑定规则</h4><ol>
 <li><p><strong>默认绑定</strong></p>
 <p>当函数独立调用时（没有调用者），<code>this</code>指向<code>window</code></p>
 <p><img   class="lazyload" data-original="/images/14/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
