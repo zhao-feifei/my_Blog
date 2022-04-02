@@ -6,13 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>this - Hexo</title>
+  <title>Python脚本+云函数实现今日校园自动打卡 - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
-  <meta name="description" content="JS中的this指向 
-一. 背景​    this的...">
+  <meta name="description" content="自动打卡 
+一. 下载脚本先下载所需的脚本，我将代码放...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -151,7 +151,7 @@
       
       
     </div>
-    <div class="center">this</div>
+    <div class="center">Python脚本+云函数实现今日校园自动打卡</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -191,72 +191,54 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="/images/14/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/19/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">this</h1>
+    <h1 class="head-title">Python脚本+云函数实现今日校园自动打卡</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1148</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>566</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-          <p><p>JS中的<strong>this</strong>指向</p>
+          <p><p>自动打卡</p>
         
         </p>
-<h4 id="一-背景"><a href="#一-背景" class="headerlink" title="一. 背景"></a>一. 背景</h4><p>​    <code>this</code>的作用：</p>
-<p><code>this提供了一种更优雅的方式来隐式&quot;传递&quot;对象引用，因此可以将API设计得更加简洁并且易于复用。</code>——————《你不知道的JavaScript  上卷》</p>
-<p>众所周知，<code>this</code>既不指向函数自身也不指向函数的词法作用域,<code>this</code>实际上是在函数被调用时发生的绑定，它指向什么完全取决于函数在哪里被调用。下面来看一下<code>this</code>的绑定规则。</p>
-<h4 id="二-绑定规则"><a href="#二-绑定规则" class="headerlink" title="二.  绑定规则"></a>二.  绑定规则</h4><ol>
-<li><p><strong>默认绑定</strong></p>
-<p>当函数独立调用时（没有调用者），<code>this</code>指向<code>window</code></p>
-<p><img   class="lazyload" data-original="/images/14/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>严格模式下，<code>this</code>指向<code>undefined</code></p>
-<p><img   class="lazyload" data-original="/images/14/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>需要注意的是，一下这种形式也是属于函数独立调用</p>
-<p><img   class="lazyload" data-original="/images/14/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-</li>
-<li><p><strong>隐式绑定</strong></p>
-<p>当函数调用位置有上下文对象时，<code>this</code>指向当前上下文对象。</p>
-<p><img   class="lazyload" data-original="/images/14/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>注意，上面这个例子中<code>foo</code>函数声明在全局作用域中，之后又被当作引用属性添加到 obj 中，当函数引 用有上下文对象时，隐式绑定规则会把函数调用中的 this 绑定到这个上下文对象。因为调 用 foo() 时 this 被绑定到 obj，因此 this.a 和 obj.a 是一样的。而且对象属性引用链中只有最顶层或者说最后一层会影响调用位置，比如下面这段代码：</p>
-<p><img   class="lazyload" data-original="/images/14/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>被隐式绑定的函数有时会丢失绑定对象，例如：</p>
-<p><img   class="lazyload" data-original="/images/14/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>虽然 <code>bar</code> 是<code> obj.foo</code> 的一个引用，但是实际上，它引用的是 <code>foo</code> 函数本身，此此时的 <code>bar</code> 其实是一个不带任何修饰的函数调用，因此应用了默认绑定。</p>
-</li>
-<li><p><strong>显式绑定</strong></p>
-<p>如果我们想在某个对象上强制调用函数，可以使用原型上的<code>call</code>,<code>apply</code>,<code>bind</code>方法，以<code>call</code>方法为例：</p>
-<p><img   class="lazyload" data-original="/images/14/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>通过使用<code>call</code>方法，我们在调用<code>foo</code>时强制把它的<code>this</code>绑定到<code>obj</code>上。</p>
-</li>
-<li><p><strong>New绑定</strong></p>
-<p>首先，要确定的是，在传统的面向类的语言中，“构造函数”是类中的一些特殊方法，使用 new 初始化类时会调用类中的构造函数。而<code>JS</code>中的<code>new</code>机制和其他语言完全不同。在使用<code>new</code>来调用函数时，会执行以下操作：</p>
-<p>（1）创建一个全新的对象</p>
-<p>（2）把对象与构造函数通过<code>原型链</code>连接起来</p>
-<p>（3）将函数中的<code>this</code>指向此对象</p>
-<p>（4）如果没有返回其他对象，则自动返回创建的新对象</p>
-<p>可以看到<code>new</code>操作符可以影响<code>this</code>的绑定行为，例如以下代码：</p>
-</li>
-</ol>
-<p><img   class="lazyload" data-original="/images/14/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<ol start="5">
-<li><p><strong>优先级</strong></p>
-<p>如果有多种绑定方式，优先级如下：</p>
-<p><code>new &gt; 显式绑定 &gt; 隐式绑定 &gt; 默认绑定</code></p>
-</li>
-</ol>
-<h4 id="三-箭头函数"><a href="#三-箭头函数" class="headerlink" title="三. 箭头函数"></a>三. 箭头函数</h4><p>凡事都有例外，<code>this</code>也一样，前面介绍的几种<code>this</code>绑定方式只针对箭头函数，而ES6中的箭头函数没有自己的<code>this</code>，却又能在函数中使用<code>this</code>，实际上箭头函数的没有<code>this</code>，按照作用域链向上查找，直到找到普通函数或者window，因此，箭头函数的this是外层作用于的<code>this</code>。</p>
+<h4 id="一-下载脚本"><a href="#一-下载脚本" class="headerlink" title="一. 下载脚本"></a>一. 下载脚本</h4><p>先下载所需的脚本，我将代码放在了<code>github</code>上，<a target="_blank" rel="noopener" href="https://github.com/zhao-feifei/Automatic">点我跳转</a>到代码仓库，将代码下载到本地后即可进行部署，配置文件适用于<code>大连大学</code>,其他学校也可以根据具体情况自己配置，需要注意的是打卡地点的<code>经纬度</code>需要保留小数点后六位，学校的具体坐标可自行百度。</p>
+<h4 id="二-部署"><a href="#二-部署" class="headerlink" title="二. 部署"></a>二. 部署</h4><p>打开腾讯云（第一次使用需要认证），<a target="_blank" rel="noopener" href="https://console.cloud.tencent.com/scf/list?rid=1&ns=default">点我跳转到腾讯云</a>，点击左侧<code>函数服务</code>，然后点<code>新建</code></p>
+<p><img   class="lazyload" data-original="/images/19/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>然后点<code>从头开始</code>,选择运行环境为<code>Python 3.6</code></p>
+<p><img   class="lazyload" data-original="/images/19/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>选择上<code>传本地文件夹</code>，将本地配置好的文件上传，然后点<code>高级设置</code></p>
+<p><img   class="lazyload" data-original="/images/19/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>在高级设置中将超时时间设置为<code>60</code>秒，然后点<code>完成</code></p>
+<p><img   class="lazyload" data-original="/images/19/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/19/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>OK，我们还需要设置一下脚本的执行时间，依次点击<code>触发管理</code>和<code>创建触发器</code></p>
+<p><img   class="lazyload" data-original="/images/19/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>依次配置如下三个选项后点<code>完成</code>，其中<code>0 0 8 * * * *</code>代表每天8点0分0秒时自动打卡，可根据需求自己设置</p>
+<p><img   class="lazyload" data-original="/images/19/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>回到代码</p>
+<p><img   class="lazyload" data-original="/images/19/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>点击上面的<code>终端</code>,<code>新终端</code>,然后在终端中输入以下代码后回车</p>
+<blockquote>
+<p>x curl -sSO <a target="_blank" rel="noopener" href="https://raw.fastgit.org/CarltonHere/auto-cpdaily/gh-pages/setup.sh">https://raw.fastgit.org/CarltonHere/auto-cpdaily/gh-pages/setup.sh</a> &amp;&amp; bash setup.sh</p>
+</blockquote>
+<p><img   class="lazyload" data-original="/images/19/9.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>点击左侧<code>config.yml</code>，分别输入今日校园app登录时的学号与密码，点击<code>部署</code></p>
+<p><img   class="lazyload" data-original="/images/19/10.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/19/11.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>OK至此已经完成部署，以后就不用打卡了，岂不美哉？</p>
       </section>
       <section class="extra">
         
           <!-- <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
-    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/this/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;this&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;this&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/Python%E8%84%9A%E6%9C%AC+%E4%BA%91%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E4%BB%8A%E6%97%A5%E6%A0%A1%E5%9B%AD%E8%87%AA%E5%8A%A8%E6%89%93%E5%8D%A1/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Python%E8%84%9A%E6%9C%AC+%E4%BA%91%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E4%BB%8A%E6%97%A5%E6%A0%A1%E5%9B%AD%E8%87%AA%E5%8A%A8%E6%89%93%E5%8D%A1&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;Python%E8%84%9A%E6%9C%AC+%E4%BA%91%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E4%BB%8A%E6%97%A5%E6%A0%A1%E5%9B%AD%E8%87%AA%E5%8A%A8%E6%89%93%E5%8D%A1&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul> -->
@@ -277,8 +259,8 @@
 
         
   <nav class="nav">
-    <a href="/2020/10/11/vue%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1/"><i class="iconfont iconleft"></i>组件通信总结</a>
-    <a href="/2020/10/11/git%E7%AC%94%E8%AE%B0/">git笔记<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/Vue%E6%BA%90%E7%A0%81(%E4%B8%80)%20%E2%80%94%E2%80%94%20%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/"><i class="iconfont iconleft"></i>Vue源码(一) —— 响应式原理</a>
+    <a href="/2020/10/11/React%E7%AC%94%E8%AE%B0/">React笔记<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
