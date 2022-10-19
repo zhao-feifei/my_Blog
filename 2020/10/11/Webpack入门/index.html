@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>event loop - Hexo</title>
+  <title>webpack入门 - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
@@ -155,7 +155,7 @@
       
       
     </div>
-    <div class="center">event loop</div>
+    <div class="center">webpack入门</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -195,13 +195,13 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="/images/10/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/20/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">event loop</h1>
+    <h1 class="head-title">webpack入门</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>314</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>258</span>
     </div>
   </div>
 </section>
@@ -212,32 +212,44 @@
         
         </p>
 <h4 id="一-基础配置"><a href="#一-基础配置" class="headerlink" title="一. 基础配置"></a>一. 基础配置</h4><ul>
-<li><strong>下载依赖</strong></li>
+<li><p><strong>下载依赖</strong></p>
+<p><img   class="lazyload" data-original="/images/20/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</li>
+<li><p><strong>启用 Webpack</strong></p>
+<p><img   class="lazyload" data-original="/images/20/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</li>
+<li><p><strong>配置文件</strong></p>
+<blockquote>
+<p>在项目根目录下新建文件：<code>webpack.config.js</code></p>
+</blockquote>
+</li>
 </ul>
-<p><img   class="lazyload" data-original="/images/20/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>​      <img   class="lazyload" data-original="/images/20/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <ul>
-<li><strong>同步与异步</strong></li>
+<li><p><strong>修改配置文件</strong></p>
+<p><img   class="lazyload" data-original="/images/20/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<blockquote>
+<p>运行指令 npx webpack</p>
+</blockquote>
+</li>
+<li><p><strong>处理Css资源</strong></p>
+<blockquote>
+<p><code>css-loader</code>：负责将 Css 文件编译成 Webpack 能识别的模块</p>
+<p><code>style-loader</code>：动态创建一个 Style 标签，里面放置 Webpack 中 Css 模块内容</p>
+</blockquote>
+<p><img   class="lazyload" data-original="/images/20/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<blockquote>
+<p>新建index.css并引入</p>
+</blockquote>
+<p><img   class="lazyload" data-original="/images/20/9.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<blockquote>
+<p>更改配置</p>
+</blockquote>
+<p><img   class="lazyload" data-original="/images/20/10.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+</li>
+<li><p><strong>处理Less资源</strong></p>
+</li>
 </ul>
-<p>​     </p>
-<p><img   class="lazyload" data-original="/images/10/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<ol start="3">
-<li>清空微队列，分别输出3和5。</li>
-</ol>
-<p>OK，第二轮事件循环结束，此时已经输出 1，7，6，8，2，4，3，5。</p>
-<ul>
-<li><strong>第三轮</strong></li>
-</ul>
-<p>接下来执行最后一个宏任务<code>set2</code></p>
-<ol>
-<li>直接输出9。</li>
-<li>遇到<code>process.nextTick</code>,记为 <code>pro3</code>，加入微队列。</li>
-<li>遇到<code>new Promise</code>,直接输出11，<code>then</code>方法加入微队列，记为<code>then3</code>。此时队列如图：</li>
-</ol>
-<p><img   class="lazyload" data-original="/images/10/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<ol start="4">
-<li>执行 <code>pro3</code>和<code>then3</code>,分别输出10，12,微队列和宏队列已清空。</li>
-</ol>
-<p>OK，第三轮事件循环结束，上述代码会依次输出 1，7，6，8，2，4，3，5，9，11，10，12。有兴趣可以自己测试一下。</p>
       </section>
       <section class="extra">
         
