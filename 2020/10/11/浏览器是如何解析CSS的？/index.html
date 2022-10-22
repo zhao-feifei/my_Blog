@@ -6,14 +6,16 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>async await - Hexo</title>
+  <title>浏览器如何解析CSS选择器？ - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
-  <meta name="description" content="async await详解
-一. 简介
-啥是async...">
+  <meta name="description" content="浏览器解析CSS原理
+一. 浏览器渲染过程
+
+
+二. ...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -152,7 +154,7 @@
       
       
     </div>
-    <div class="center">async await</div>
+    <div class="center">浏览器如何解析CSS选择器？</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -192,69 +194,34 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="/images/21/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/22/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">async await</h1>
+    <h1 class="head-title">浏览器如何解析CSS选择器？</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>853</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>40</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-          <p><p>async await详解</p>
+          <p><p>浏览器解析CSS原理</p>
         
         </p>
-<h4 id="一-简介"><a href="#一-简介" class="headerlink" title="一. 简介"></a>一. 简介</h4><ul>
-<li><p><strong>啥是async await</strong></p>
-<blockquote>
-<p>async/await是一种建立在Promise之上的编写异步代码的新方法，被认为是 JS异步操作的最终解决方案。相对于 Promise 和回调，它的可读性和简洁度都更高。</p>
-<p>async 是异步的意思，而 await 是 async wait的简写，意思是异步等待。所以从语义上就很好理解 async 用于声明一个 function 是异步的，而await 用于等待一个异步方法执行完成。</p>
-</blockquote>
-</li>
-<li><p><strong>为什么需要async await</strong></p>
-<blockquote>
-<p><code>Promise</code>虽然跳出了回调地狱的怪圈，用链式表达更加清晰，但是如果有大量的异步请求的时候，流程复杂的情况下，会发现充满了屏幕的<code>then</code>，看起来非常吃力，而ES7的Async/Await的出现就是为了解决这种复杂的情况。</p>
-</blockquote>
-</li>
-<li><p><strong>async await使用</strong></p>
-<blockquote>
-<p>async 用来声明一个异步函数，async 函数返回的是一个 Promise 对象。如果在async 函数中直接返回一个结果，async会通过 <code>Promise.resolve()</code> 封装成 Promise 对象，此外，await 只能出现在 async 函数中。下面是一个例子：</p>
-</blockquote>
-<p>​      <img   class="lazyload" data-original="/images/21/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<blockquote>
-<p>假设有这样一个场景：一个业务，分多个步骤完成，每个步骤都是异步的，而且依赖于上一个步骤的结果。我们仍然用 <code>setTimeout</code> 来模拟异步操作：</p>
-</blockquote>
-<p>​      <img   class="lazyload" data-original="/images/21/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<blockquote>
-<p>如果使用Promise实现是这样的：</p>
-</blockquote>
-<p>​      <img   class="lazyload" data-original="/images/21/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<blockquote>
-<p>而使用async await后代码的可读性更高，没有那么多的then链调用</p>
-</blockquote>
-<p>​      <img   class="lazyload" data-original="/images/21/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-</li>
+<h4 id="一-浏览器渲染过程"><a href="#一-浏览器渲染过程" class="headerlink" title="一. 浏览器渲染过程"></a>一. 浏览器渲染过程</h4><ul>
+<li></li>
 </ul>
-<h4 id="二-原理"><a href="#二-原理" class="headerlink" title="二. 原理"></a>二. 原理</h4><blockquote>
-<p>简单概况：async 函数就是 Generator 函数的语法糖。async 函数将 Generator 函数的星号（*）替换成 async，将 yield 替换成 await，仅此而已。</p>
+<h4 id="二-如何解析CSS选择器？"><a href="#二-如何解析CSS选择器？" class="headerlink" title="二. 如何解析CSS选择器？"></a>二. 如何解析CSS选择器？</h4><blockquote>
 </blockquote>
-<p>​             <img   class="lazyload" data-original="/images/21/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<blockquote>
-<p>下面给出 spawn 函数的实现    </p>
-</blockquote>
-<p>​             <img   class="lazyload" data-original="/images/21/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p>​        </p>
       </section>
       <section class="extra">
         
           <!-- <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
-    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/async%20%20await%E8%AF%A6%E8%A7%A3/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;async%20%20await%E8%AF%A6%E8%A7%A3&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;async%20%20await%E8%AF%A6%E8%A7%A3&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul> -->
@@ -275,8 +242,8 @@
 
         
   <nav class="nav">
-    <a href="/2020/10/11/Webpack%E5%85%A5%E9%97%A8/"><i class="iconfont iconleft"></i>webpack入门</a>
-    <a href="/2020/10/11/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F/">浏览器如何解析CSS选择器？<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/async%20%20await%E8%AF%A6%E8%A7%A3/"><i class="iconfont iconleft"></i>async await</a>
+    <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
