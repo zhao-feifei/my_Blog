@@ -6,16 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>浏览器如何解析CSS选择器？ - Hexo</title>
+  <title>实现模板编译loader - Hexo</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
-  <meta name="description" content="浏览器解析CSS原理
-一. 浏览器渲染过程
-
-
-二. ...">
+  <meta name="description" content="自定义实现webpack  loader
+一. 准备工...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -154,7 +151,7 @@
       
       
     </div>
-    <div class="center">浏览器如何解析CSS选择器？</div>
+    <div class="center">实现模板编译loader</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -194,34 +191,47 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="/images/22/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/23/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">浏览器如何解析CSS选择器？</h1>
+    <h1 class="head-title">实现模板编译loader</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>40</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>712</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-          <p><p>浏览器解析CSS原理</p>
+          <p><p>自定义实现webpack  loader</p>
         
         </p>
-<h4 id="一-浏览器渲染过程"><a href="#一-浏览器渲染过程" class="headerlink" title="一. 浏览器渲染过程"></a>一. 浏览器渲染过程</h4><ul>
-<li></li>
-</ul>
-<h4 id="二-如何解析CSS选择器？"><a href="#二-如何解析CSS选择器？" class="headerlink" title="二. 如何解析CSS选择器？"></a>二. 如何解析CSS选择器？</h4><blockquote>
-</blockquote>
+<h4 id="一-准备工作"><a href="#一-准备工作" class="headerlink" title="一. 准备工作"></a>一. 准备工作</h4><p>新建空文件夹，执行<code>npm init -y</code> 初始化<code>npm</code>，新建<code>index.html</code>，<code>src</code>文件夹并添加<code>app.js</code>文件和<code>info.tpl</code>文件，新建<code>webpack.config.js</code>配置文件并初始化配置，此时目录结构</p>
+<p><img   class="lazyload" data-original="/images/23/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><code>app.js</code>和<code>info.tpl</code>模板文件结构如图</p>
+<p><img   class="lazyload" data-original="/images/23/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/23/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>在<code>webpack.config.js</code>文件中添加loader</p>
+<p><img   class="lazyload" data-original="/images/23/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>在根目录下创建<code>loaders</code>文件夹，新建<code>tpl-loader.js</code>文件，我们将在这个文件中实现模板编译loader。</p>
+<h4 id="二-编写loader"><a href="#二-编写loader" class="headerlink" title="二. 编写loader"></a>二. 编写loader</h4><p> loader函数的主要功能是对字符串的操作，我们可以拿到tpl文件的内容（字符串source），将我们的option对应的value替换掉模板中的占位处，也就是<code>&#123;&#123;&#125;&#125;</code>包裹的地方，返回一个新的函数，由于传入的模板中会有空格和换行，先将其处理掉</p>
+<p><img   class="lazyload" data-original="/images/23/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>接着了解一下<code>replace</code>函数高级用法:</p>
+<p><img   class="lazyload" data-original="/images/23/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><code>replace</code>函数第一种用法，第二个参数传递要替换后的值，直接传字符串即可，第二种高级用法，传递一个回调函数，回调里面的参数分别是当前匹配到的字符串，第一分组匹配的内容、第二分组匹配的内容…… 以此类推直到最后一个分组（小括号内的内容），当前匹配到的字符串的索引，原字符串。</p>
+<p>于是我们可以抽离出工具函数</p>
+<p><img   class="lazyload" data-original="/images/23/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>然后在<code>tpl-loader.js</code>文件中引入并return模板字符串</p>
+<p><code>app.js</code>里面<code>tpl</code>其实是个函数，我们loader返回的应该是个字符串，然后交给<code>babel-loader</code>处理，它会把字符串转换成js代码执行，所以我们来处理<code>tpl-loader</code>函数的逻辑</p>
+<p><img   class="lazyload" data-original="/images/23/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
       </section>
       <section class="extra">
         
           <!-- <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
-    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%9D%BF%E7%BC%96%E8%AF%91loader/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%9D%BF%E7%BC%96%E8%AF%91loader&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%9D%BF%E7%BC%96%E8%AF%91loader&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul> -->
@@ -242,8 +252,8 @@
 
         
   <nav class="nav">
-    <a href="/2020/10/11/async%20%20await%E8%AF%A6%E8%A7%A3/"><i class="iconfont iconleft"></i>async await</a>
-    <a href="/2020/10/11/%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%9D%BF%E7%BC%96%E8%AF%91loader/">实现模板编译loader<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F/"><i class="iconfont iconleft"></i>浏览器如何解析CSS选择器？</a>
+    <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
