@@ -12,7 +12,7 @@
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
   <meta name="description" content="大文件上传前端方案
-一. 背景文件上传是个非常普遍的业...">
+一. 背景​        文件上...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -193,7 +193,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>585</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>600</span>
     </div>
   </div>
 </section>
@@ -203,7 +203,7 @@
           <p><p>大文件上传前端方案</p>
         
         </p>
-<h4 id="一-背景"><a href="#一-背景" class="headerlink" title="一. 背景"></a>一. 背景</h4><p>文件上传是个非常普遍的业务场景，特别是在一些资源管理相关的业务中。在文件过大时（比如1G的文件），普通的上传方式可能会遇到以下三个问题。</p>
+<h4 id="一-背景"><a href="#一-背景" class="headerlink" title="一. 背景"></a>一. 背景</h4><p>​        文件上传是个非常普遍的业务场景，特别是在一些资源管理相关的业务中。在文件过大时（比如1G的文件），普通的上传方式可能会遇到以下三个问题。</p>
 <blockquote>
 <ol>
 <li>文件上传超时：原因是前端请求框架认限制最大请求时长，或者是 nginx（或其它代理/网关） 限制了最大请求时长。</li>
@@ -211,10 +211,8 @@
 <li>上传耗时久,由于各种网络原因上传失败，且失败之后需要从头开始。</li>
 </ol>
 </blockquote>
-<p>对于前两点，虽说可以通过一定的配置来解决，但有时候也不会那么顺利，毕竟调大这些参数会对后台造成一定的压力，需要兼顾实际场景。只是上传慢的话忍一忍是可以接受的，但是失败后重头开始，在网络环境差的时候简直就是灾难。</p>
-<p>前端大文件上传网上的大部分文章已经给出了解决方案，核心是<code>利用 Blob.prototype.slice</code> 方法，和数组的 slice 方法相似，文件的 slice 方法可以返回<code>原文件的某个切片</code>。</p>
-<p>预先定义好单个切片大小，将文件切分为一个个切片，然后借助 http 的可并发性，同时上传多个切片。这样从原本传一个大文件，变成了<code>并发</code>传多个小的文件切片，可以大大减少上传时间。</p>
-<h4 id="二-需求分析"><a href="#二-需求分析" class="headerlink" title="二. 需求分析"></a>二. 需求分析</h4><p>这篇博客将从前端的视角实现大文件上传，主要的功能点有：</p>
+<p>对于前两点，虽说可以通过一定的配置来解决，但有时候也不会那么顺利，毕竟调大这些参数会对后台造成一定的压力，需要兼顾实际场景。只是上传慢的话是可以忍受的，但是失败后重头开始，在网络环境差的时候简直就是灾难。</p>
+<h4 id="二-需求分析"><a href="#二-需求分析" class="headerlink" title="二. 需求分析"></a>二. 需求分析</h4><p>​        前端大文件上传网上的大部分文章已经给出了解决方案，核心是<code>利用 Blob.prototype.slice</code> 方法，和数组的 slice 方法相似，文件的 slice 方法可以返回<code>原文件的某个切片</code>。预先定义好单个切片大小，将文件切分为一个个切片，然后借助 http 的可并发性，同时上传多个切片。这样从原本传一个大文件，变成了<code>并发</code>传多个小的文件切片，可以大大减少上传时间。这篇博客将从前端的视角实现大文件上传，需要实现的功能点有：</p>
 <blockquote>
 <p>1.大文件切片并上传</p>
 <p>2.进度管控</p>
