@@ -6,12 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>技术 - 赵飞飞的小破站</title>
+  <title>原生JS+Node实现大文件上传——前端 - 赵飞飞的小破站</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
-  
-  
+  <meta name="keywords" content=", 算法">
+  <meta name="description" content="大文件上传前端方案
+一. 背景文件上传是个非常普遍的业...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -150,7 +151,7 @@
       
       
     </div>
-    <div class="center">分类</div>
+    <div class="center">原生JS+Node实现大文件上传——前端</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -180,53 +181,93 @@
   </div>
 </nav>
   <main id="main">
-  <section class="archive">
-    <div class="archive-container">
-      <div class="archive-post">
-        <h3 class="archive-total"># 技术</h3>
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/24/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">原生JS+Node实现大文件上传——前端</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>585</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+          <p><p>大文件上传前端方案</p>
+        
+        </p>
+<h4 id="一-背景"><a href="#一-背景" class="headerlink" title="一. 背景"></a>一. 背景</h4><p>文件上传是个非常普遍的业务场景，特别是在一些资源管理相关的业务中。在文件过大时（比如1G的文件），普通的上传方式可能会遇到以下三个问题。</p>
+<blockquote>
+<ol>
+<li>文件上传超时：原因是前端请求框架认限制最大请求时长，或者是 nginx（或其它代理/网关） 限制了最大请求时长。</li>
+<li>文件大小超限：原因在于后端对单个请求大小做了限制，一般 nginx 和 server 都会做这个限制。</li>
+<li>上传耗时久,由于各种网络原因上传失败，且失败之后需要从头开始。</li>
+</ol>
+</blockquote>
+<p>对于前两点，虽说可以通过一定的配置来解决，但有时候也不会那么顺利，毕竟调大这些参数会对后台造成一定的压力，需要兼顾实际场景。只是上传慢的话忍一忍是可以接受的，但是失败后重头开始，在网络环境差的时候简直就是灾难。</p>
+<p>前端大文件上传网上的大部分文章已经给出了解决方案，核心是<code>利用 Blob.prototype.slice</code> 方法，和数组的 slice 方法相似，文件的 slice 方法可以返回<code>原文件的某个切片</code>。</p>
+<p>预先定义好单个切片大小，将文件切分为一个个切片，然后借助 http 的可并发性，同时上传多个切片。这样从原本传一个大文件，变成了<code>并发</code>传多个小的文件切片，可以大大减少上传时间。</p>
+<h4 id="二-需求分析"><a href="#二-需求分析" class="headerlink" title="二. 需求分析"></a>二. 需求分析</h4><p>这篇博客将从前端的视角实现大文件上传，主要的功能点有：</p>
+<blockquote>
+<p>1.大文件切片并上传</p>
+<p>2.进度管控</p>
+<p>3.断点续传+秒传</p>
+</blockquote>
+      </section>
+      <section class="extra">
+        
+          <!-- <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>John Doe</li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul> -->
         
         
-          
-            <h3 class="archive-year">2020 年</h3>
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2020/10/11/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/">10/11</a>
-            <a class="archive-title" href="/2020/10/11/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/">执行上下文与执行上下文栈</a>
-          </div>
+          <!-- <section class="donate">
+  <div id="qrcode-donate">
+    <img   class="lazyload" data-original="https://pic.izhaoo.com/alipay.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" >
+  </div>
+  <div class="icon">
+    <a href="javascript:;" id="alipay"><i class="iconfont iconalipay"></i></a>
+    <a href="javascript:;" id="wechat"><i class="iconfont iconwechat-fill"></i></a>
+  </div>
+</section> -->
         
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2020/10/11/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F/">10/11</a>
-            <a class="archive-title" href="/2020/10/11/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90CSS%E7%9A%84%EF%BC%9F/">浏览器如何解析CSS选择器？</a>
-          </div>
         
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2020/10/11/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">10/11</a>
-            <a class="archive-title" href="/2020/10/11/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">生命周期钩子</a>
-          </div>
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul> 
+
         
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2020/10/11/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B0%81%E8%A3%85Promise/">10/11</a>
-            <a class="archive-title" href="/2020/10/11/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B0%81%E8%A3%85Promise/">自定义封装Promise</a>
-          </div>
+  <nav class="nav">
+    <a href="/2020/10/11/%E9%97%AD%E5%8C%85/"><i class="iconfont iconleft"></i>闭包</a>
+    <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
         
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2020/10/11/%E9%97%AD%E5%8C%85/">10/11</a>
-            <a class="archive-title" href="/2020/10/11/%E9%97%AD%E5%8C%85/">闭包</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2020/10/11/%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF/">10/11</a>
-            <a class="archive-title" href="/2020/10/11/%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF/">原生JS+Node实现大文件上传——前端</a>
-          </div>
+          <!-- 
+<aside class="toc-wrap">
+  <!-- <h3 class="toc-title">文章目录：</h3>
+     -->
+<!-- </aside> -->
+ -->
         
       </div>
     </div>
-  </section>
+  </div>
 </main>
   
 
