@@ -193,7 +193,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>820</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1156</span>
     </div>
   </div>
 </section>
@@ -215,7 +215,7 @@
 <h4 id="二-需求分析"><a href="#二-需求分析" class="headerlink" title="二. 需求分析"></a>二. 需求分析</h4><p>前端大文件上传网上的大部分文章已经给出了解决方案，核心是<code>利用 Blob.prototype.slice</code> 方法，和数组的 slice 方法相似，文件的 slice 方法可以返回<code>原文件的某个切片</code>。预先定义好单个切片大小，将文件切分为一个个切片，然后借助 http 的可并发性，同时上传多个切片。这样从原本传一个大文件，变成了<code>并发</code>传多个小的文件切片，可以大大减少上传时间。这篇博客将从前端的视角实现大文件上传，需要实现的功能点有：</p>
 <blockquote>
 <p>1.大文件切片并上传</p>
-<p>2.进度管控</p>
+<p>2.进度管控+通知服务器合并切片</p>
 <p>3.断点续传+秒传</p>
 </blockquote>
 <p>最终效果如下：</p>
@@ -235,7 +235,25 @@
 <ul>
 <li>上传切片</li>
 </ul>
-<p>将每个切片的</p>
+<p>将每个切片的两个属性append到formdata对象中，并使用<code>Promise</code>处理结果</p>
+<p><img   class="lazyload" data-original="/images/24/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<ul>
+<li>进度管控</li>
+</ul>
+<p>根据已上传的切片数量和切片总数的比例控制进度条，在每个切片上传后的回调中执行<code>complate</code>方法</p>
+<p><img   class="lazyload" data-original="/images/24/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<ul>
+<li>通知服务器合并切片</li>
+</ul>
+<p>如果所有切片上传完毕，则调用<code>/upload_merge</code>接口通知服务器合并切片</p>
+<p><img   class="lazyload" data-original="/images/24/7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<ul>
+<li>断点续传</li>
+</ul>
+<p>断点续传指的是上传期间断网后，再次联网可以继续上传，不需要上传已经传过的切片。这个功能需要后端的配合，提供一个<code>/upload_already</code>接口，通过服务端传过去的HASH查找已经上传的切片，并以数组形式返回，这样前端就能判断某个切片是否已经存在于服务端了。</p>
+<p><img   class="lazyload" data-original="/images/24/8.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>上传切片前先检查此切片是否在<code>already</code>数组中，如果不存在再继续进行上传流程</p>
+<p><img   class="lazyload" data-original="/images/24/9.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
       </section>
       <section class="extra">
         
