@@ -6,13 +6,14 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>原生JS+Node实现大文件上传——前端 - 赵飞飞的小破站</title>
+  <title>call，apply，bind - 赵飞飞的小破站</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 算法">
-  <meta name="description" content="大文件上传前端方案
-一. 背景文件上传是个非常普遍的业...">
+  <meta name="description" content="call，apply，bind作用及原理
+一. 作用
+...">
   <meta name="author" content="John Doe">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -151,7 +152,7 @@
       
       
     </div>
-    <div class="center">原生JS+Node实现大文件上传——前端</div>
+    <div class="center">call，apply，bind</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -187,38 +188,35 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="/images/24/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/25/0.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">原生JS+Node实现大文件上传——前端</h1>
+    <h1 class="head-title">call，apply，bind</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1168</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>833</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-          <p><p>大文件上传前端方案</p>
+          <p><p>call，apply，bind作用及原理</p>
         
         </p>
-<h4 id="一-背景"><a href="#一-背景" class="headerlink" title="一. 背景"></a>一. 背景</h4><p>文件上传是个非常普遍的业务场景，特别是在一些资源管理相关的业务中。在文件过大时（比如1G的文件），普通的上传方式可能会遇到以下三个问题。</p>
+<h4 id="一-作用"><a href="#一-作用" class="headerlink" title="一. 作用"></a>一. 作用</h4><ul>
+<li>三者都可以改变函数的this对象指向。</li>
+<li>三者第一个参数都是this要指向的对象，如果如果没有这个参数或参数为undefined或null，则默认指向全局window。</li>
+<li>三者都可以传参，但call是参数列表，而apply是数组，且apply和call是一次性传入参数，而bind可以分为多次传入。</li>
+<li>bind 是返回绑定this之后的函数，便于稍后调用；apply 、call 则是立即执行 。</li>
+</ul>
+<p>拿call举个例子：</p>
+<p><img   class="lazyload" data-original="/images/24/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>注意：</p>
 <blockquote>
-<ol>
-<li>文件上传超时：原因是前端请求框架认限制最大请求时长，或者是 nginx（或其它代理/网关） 限制了最大请求时长。</li>
-<li>文件大小超限：原因在于后端对单个请求大小做了限制，一般 nginx 和 server 都会做这个限制。</li>
-<li>上传耗时久,由于各种网络原因上传失败，且失败之后需要从头开始。</li>
-</ol>
+<p>1.bar函数执行了</p>
+<p>2.this指向改变了</p>
 </blockquote>
-<p>对于前两点，虽说可以通过一定的配置来解决，但有时候也不会那么顺利，毕竟调大这些参数会对后台造成一定的压力，需要兼顾实际场景。只是上传慢的话是可以忍受的，但是失败后重头开始，在网络环境差的时候简直就是灾难。</p>
-<h4 id="二-需求分析"><a href="#二-需求分析" class="headerlink" title="二. 需求分析"></a>二. 需求分析</h4><p>前端大文件上传网上的大部分文章已经给出了解决方案，核心是<code>利用 Blob.prototype.slice</code> 方法，和数组的 slice 方法相似，文件的 slice 方法可以返回<code>原文件的某个切片</code>。预先定义好单个切片大小，将文件切分为一个个切片，然后借助 http 的可并发性，同时上传多个切片。这样从原本传一个大文件，变成了<code>并发</code>传多个小的文件切片，可以大大减少上传时间。这篇博客将从前端的视角实现大文件上传，需要实现的功能点有：</p>
-<blockquote>
-<p>1.大文件切片并上传</p>
-<p>2.进度管控+通知服务器合并切片</p>
-<p>3.断点续传+秒传</p>
-</blockquote>
-<p>最终效果如下：</p>
 <p><img   class="lazyload" data-original="/images/24/1.gif" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <h4 id="三-代码实现"><a href="#三-代码实现" class="headerlink" title="三. 代码实现"></a>三. 代码实现</h4><ul>
 <li>获取文件HASH</li>
@@ -264,7 +262,7 @@
           <!-- <ul class="copyright">
   
     <li><strong>本文作者：</strong>John Doe</li>
-    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://example.com/2020/10/11/call%EF%BC%8Capply%EF%BC%8Cbind%E8%AF%A6%E8%A7%A3/index.html" title="http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;call%EF%BC%8Capply%EF%BC%8Cbind%E8%AF%A6%E8%A7%A3&#x2F;index.html">http:&#x2F;&#x2F;example.com&#x2F;2020&#x2F;10&#x2F;11&#x2F;call%EF%BC%8Capply%EF%BC%8Cbind%E8%AF%A6%E8%A7%A3&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul> -->
@@ -285,8 +283,8 @@
 
         
   <nav class="nav">
-    <a href="/2020/10/11/%E9%97%AD%E5%8C%85/"><i class="iconfont iconleft"></i>闭包</a>
-    <a href="/2020/10/11/call%EF%BC%8Capply%EF%BC%8Cbind%E8%AF%A6%E8%A7%A3/">call，apply，bind<i class="iconfont iconright"></i></a>
+    <a href="/2020/10/11/%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF/"><i class="iconfont iconleft"></i>原生JS+Node实现大文件上传——前端</a>
+    <a href="/2020/10/02/%E7%85%A7%E7%89%87%E5%A2%99/">照片墙<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
