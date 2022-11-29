@@ -211,7 +211,7 @@
 <li>bind 是返回绑定this之后的函数，便于稍后调用；apply 、call 则是立即执行 。</li>
 </ul>
 <h4 id="二-代码实现"><a href="#二-代码实现" class="headerlink" title="二. 代码实现"></a>二. 代码实现</h4><p>拿call举个例子：</p>
-<p><img   class="lazyload" data-original="/images/25/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/25/1.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>注意：</p>
 <blockquote>
 <p>1.bar函数执行了</p>
@@ -221,16 +221,16 @@
 <p><img   class="lazyload" data-original="/images/25/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>这样foo身上新增加了一个属性，没关系，用 delete 再删除它就OK</p>
 <p>这样我们可以写出第一个版本：</p>
-<p><img   class="lazyload" data-original="/images/25/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/25/3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>已经可以正确打印了，但是还不够完善，官方的call 函数还能给定参数执行函数，比如这样：</p>
-<p><img   class="lazyload" data-original="/images/25/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/25/4.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>我们可以从 Arguments 对象中取值，取出第二个到最后一个参数，然后放到一个数组里。</p>
 <p>接着要把这个参数数组放到要执行的函数的参数里面去。</p>
 <p>于是有了第二个版本：</p>
-<p><img   class="lazyload" data-original="/images/25/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/25/5.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>注意，<strong>this 参数可以传 null，当为 null 的时候，视为指向 window</strong>，并且<strong>函数是可以有返回值的</strong></p>
 <p>再做一点小改进完成最终版代码：</p>
-<p><img   class="lazyload" data-original="/images/25/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p><img   class="lazyload" data-original="/images/25/6.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p><img   class="lazyload" data-original="/images/24/1.gif" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <h4 id=""><a href="#" class="headerlink" title=""></a></h4><ul>
 <li>获取文件HASH</li>
