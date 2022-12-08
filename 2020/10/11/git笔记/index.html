@@ -193,7 +193,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>October 11, 2020</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>570</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>976</span>
     </div>
   </div>
 </section>
@@ -230,14 +230,16 @@
 </ol>
 <h4 id="三-GitFlow"><a href="#三-GitFlow" class="headerlink" title="三. GitFlow"></a>三. GitFlow</h4><p>GitFlow 是团队开发的一种最佳实践，将代码划分为以下几个分支</p>
 <p><img   class="lazyload" data-original="/images/5/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p><img   class="lazyload" data-original="/images/5/2.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<p><img   class="lazyload" data-original="https://tse1-mm.cn.bing.net/th/id/R-C.3597cada9d2749f5fed24abdd5fa2b3f?rik=79U3WcIVlU9/pA&riu=http://img.zcool.cn/community/017c5155bc7aba6ac7253f3694fe80.jpg@1280w_1l_2o_100sh.jpg&ehk=5bxoapG1119cGI8pBUmE8S1BCOSp375dGgKp3UfDjCY=&risl=&pid=ImgRaw&r=0" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<p>如上图，首先，项目存在两个长期分支：</p>
 <ul>
-<li>Master 主分支。上面只保存正式发布的版本</li>
-<li>Hotfix  线上代码 Bug 修复分支。开发完后需要合并回Master和Develop分支，同时在Master上打一个tag</li>
-<li>Feather 功能分支。当开发某个功能时，创建一个单独的分支，开发完毕后再合并到 dev 分支</li>
-<li>Release 分支。待发布分支，Release分支基于Develop分支创建，在这个Release分支上测试，修改Bug</li>
-<li>Develop 开发分支。开发者都在这个分支上提交代码</li>
+<li>主分支（maste）r：专门用于部署以及负责线上代码回滚的分支，是最为稳定的一个分支，master的代码等于或者落后于develop的代码。</li>
+<li>开发分支（develop）：专门存放经过测试之后，保证代码无bug的代码分支。开发的时候主要依托于develop分支开发，基于develop分支新建分支，经过严格测试之后，才能合并到develop中，保证develop代码的稳定性（也就是日常开发中不要轻易修改develop分支代码）。</li>
+</ul>
+<p>开发过程中会从develop分支中衍生出临时开发分支：</p>
+<ul>
+<li>项目开发分支或功能分支（feature）：此分支特点是周期长、需要团队协作、代码量大。工作方式是需要创建本地以及远程feature分支，代码基于develop分支代码，经过开发、测试之后，最终合并到develop分支上。当项目上线之后，分支会保留一段时间，直至最终删除。</li>
+<li>紧急bug、其他问题修复分支（hotfix）：此分支特点是修改时间短、优先级高、代码量稍小、改完之后急需测试、上线。此分支代码也是基于develop。此分支会是团队协作或者单人、团队协作工作方式会类似feature分支，单人只需构建本地分支即可满足开发要求，当修复上线一段时间后，即可删除。</li>
+<li>预发布分支（release）：此分支是项目开发完成，经过测试没有问题之后，从develop分支分出用于项目的预发布，预发布一段时间没有问题之后合并到master分支进行正式发布。</li>
 </ul>
       </section>
       <section class="extra">
